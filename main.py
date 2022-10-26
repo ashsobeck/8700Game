@@ -38,23 +38,23 @@ while running:
             running = False
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_A:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                 HeadX_change = -3
-            if event.key == pygame.K_RIGHT or event.key == pygame.K_D:
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                 HeadX_change = 3
-            if event.key == pygame.K_UP or event.key == pygame.K_W:
+            if event.key == pygame.K_UP or event.key == pygame.K_w:
                 HeadY_change = -3
-            if event.key == pygame.K_DOWN or event.key == pygame.K_S:
+            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                 HeadY_change = 3
 
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_A:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                 HeadX_change = 0
-            if event.key == pygame.K_RIGHT or event.key == pygame.K_D:
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                 HeadX_change = 0
-            if event.key == pygame.K_UP or event.key == pygame.K_W:
+            if event.key == pygame.K_UP or event.key == pygame.K_w:
                 HeadY_change = 0
-            if event.key == pygame.K_DOWN or event.key == pygame.K_S:
+            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                 HeadY_change = 0
 
     screen.blit(background_image, (0, 0))
