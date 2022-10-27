@@ -38,13 +38,13 @@ while running:
             snake.move_snake()
         if event.type == pygame.KEYDOWN:
             if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and snake.direction != 'right':
-                snake.direction = 'left'
+                snake.next_direction = 'left'
             if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and snake.direction != 'left':
-                snake.direction = 'right'
+                snake.next_direction = 'right'
             if (event.key == pygame.K_UP or event.key == pygame.K_w) and snake.direction != 'down':
-                snake.direction = 'up'
+                snake.next_direction = 'up'
             if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and snake.direction != 'up':
-                snake.direction = 'down'
+                snake.next_direction = 'down'
 
     screen.blit(background_image, (0, 0))
     snake.draw_snake()

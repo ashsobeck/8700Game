@@ -27,6 +27,7 @@ class Snake():
         self.body_bl = pygame.image.load("icons/Snake_Corner_BL.png")
 
         self.direction = 'right'
+        self.next_direction = 'right'
         # the body keeps track of the positon of each body part
         # for simplicity we will keep track of what cell its in
         self.body = [[15, 10], [14, 10], [13, 10], [12, 10]]
@@ -102,16 +103,24 @@ class Snake():
         # get every element except the last one since it dissappears
         copy = self.body[:-1]
         front = self.body[0]
-        if self.direction == 'left':
-            # move head one block to left in x direction
-            copy.insert(0, [front[0] - 1, front[1]])
-        elif self.direction == 'right':
-            # move head one block to right in x direction
-            copy.insert(0, [front[0] + 1, front[1]])
-        elif self.direction == 'down':
-            # move head one block down in y direction
-            copy.insert(0, [front[0], front[1] + 1])
+        self.direction = self.next_direction
+        # Checks if its at a border then dont move the snake
+        if (front[0] != 0 and self.direction == 'left') or (
+                front[0] != 29 and self.direction == 'right') or (
+                front[1] != 0 and self.direction == 'up') or (
+                front[1] != 19 and self.direction == 'down'):
+            if self.direction == 'left':
+                # move head one block to left in x direction
+                copy.insert(0, [front[0] - 1, front[1]])
+            elif self.direction == 'right':
+                # move head one block to right in x direction
+                copy.insert(0, [front[0] + 1, front[1]])
+            elif self.direction == 'down':
+                # move head one block down in y direction
+                copy.insert(0, [front[0], front[1] + 1])
+            else:
+                # move head one block down in y direction
+                copy.insert(0, [front[0], front[1] - 1])
+            self.body = copy
         else:
-            # move head one block down in y direction
-            copy.insert(0, [front[0], front[1] - 1])
-        self.body = copy
+            print("DEAD YOU HAVE DIED WOW YOU SUCK")
