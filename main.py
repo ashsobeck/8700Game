@@ -1,4 +1,5 @@
 import pygame
+from pumpkin import Pumpkin
 from snake import Snake
 
 # Init pygame
@@ -23,6 +24,8 @@ icon = pygame.image.load("icons/scream.png")
 pygame.display.set_icon(icon)
 
 snake = Snake(screen, WIDTH, HEIGHT)
+pumpkin_list = []
+pumpkin_list.append(Pumpkin(screen, snake))
 running = True
 
 SCREEN_UPDATE = pygame.USEREVENT
@@ -48,6 +51,18 @@ while running:
 
     screen.blit(background_image, (0, 0))
     snake.draw_snake()
+    snake.if_collision()
+    #make a copy before potentially modifying list
+    pump_list_copy = pumpkin_list
+    for pump in pumpkin_list:
+        pump.draw()
+        create_new, destroy = pump.if_collision()
+        if create_new:
+            p = pump.clone()
+            pump_list_copy.append(p)
+        if destroy:
+            pump_list_copy.remove(pump)
+    pumpkin_list = pump_list_copy
     pygame.display.update()
     # this means the game operates at 60 fps, just makes the movements smoother and not choppy
     clock.tick(60)
