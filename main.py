@@ -23,8 +23,11 @@ pygame.display.set_caption("Haunted Ghost Snake")
 icon = pygame.image.load("icons/scream.png")
 pygame.display.set_icon(icon)
 
+
+#create our snek
 snake = Snake(screen, WIDTH, HEIGHT)
 pumpkin_list = []
+#create our first pumpkin
 pumpkin_list.append(Pumpkin(screen, snake))
 running = True
 
@@ -51,18 +54,30 @@ while running:
 
     screen.blit(background_image, (0, 0))
     snake.draw_snake()
+    #check if the snake collides with itself
     snake.if_collision()
-    #make a copy before potentially modifying list
+
+    #make a copy before potentially modifying list of pumpkins
     pump_list_copy = pumpkin_list
+    #for each pumpkin
     for pump in pumpkin_list:
         pump.draw()
+        #pumpking checks if it has collided with the snake head
         create_new, destroy = pump.if_collision()
+        #clone the pumpkin and randomly place it on the map
         if create_new:
             p = pump.clone()
+            #add the new pumpking to the list
             pump_list_copy.append(p)
+        #if the eaten pumpkin has gone through the whole snake, remove from list
         if destroy:
+            #removes specific class instance from list
             pump_list_copy.remove(pump)
+    #reset pumpkin list
     pumpkin_list = pump_list_copy
+
+    #update the display
     pygame.display.update()
+
     # this means the game operates at 60 fps, just makes the movements smoother and not choppy
     clock.tick(60)

@@ -1,4 +1,3 @@
-from cmath import rect
 import pygame
 
 class Snake():
@@ -63,15 +62,18 @@ class Snake():
             rect = pygame.Rect(x, y, self.block_size, self.block_size)
             self.rect[index] = rect
 
+            #if its the front of the snake show the head
             if index == 0:
                 self.screen.blit(self.head, rect)
+            #if at the end then show the tail
             elif index == self.body.__len__() - 1:
                 self.screen.blit(self.tail, rect)
             else:
+                #if it's in the middle then get the 2 blocks on either side
                 prev_block = self.subtract_positions(self.body[index + 1], block)
                 next_block = self.subtract_positions(self.body[index - 1], block)
 
-                # body positions
+                # body orientations: if the prev and next block are on same plane
                 if prev_block[0] == next_block[0]:
                     self.screen.blit(self.body_vert, rect)
                 elif prev_block[1] == next_block[1]:
@@ -128,6 +130,7 @@ class Snake():
         else:
             print("DEAD YOU HAVE DIED WOW YOU SUCK")
 
+    #update the head to be a certain image based on direction
     def update_head(self):
         if self.direction == 'right':
             self.head = self.head_right
@@ -138,6 +141,7 @@ class Snake():
         else:
             self.head = self.head_down
 
+    #update the tail to be a certain image based on direction
     def update_tail(self):
         # take the cell values of the block beside the tail minues the tail
         tail = self.subtract_positions(self.body[-2], self.body[-1])
@@ -150,6 +154,7 @@ class Snake():
         else:
             self.tail = self.tail_down
 
+    #subtract the positions of 2 snake body parts
     def subtract_positions(self, first_list: list, second_list: list) -> list:
         final_position = []
         # zip allows us to iterate over bost lists at the same time
@@ -157,6 +162,7 @@ class Snake():
             final_position.append(a - b)
         return final_position
 
+    #returns true if the head of the snake (rect[0]) collides with any part of the rest of the snake
     def if_collision(self):
         if True in [self.rect[0].colliderect(rect) for rect in self.rect[1:]]:
             print ("STOP HITTING YOURSELF")

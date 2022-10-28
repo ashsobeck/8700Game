@@ -6,18 +6,27 @@ from snake import Snake
 class Pumpkin():
     def __init__(self, screen, snake: Snake, width=960, height=640, block_size=32):
 
+        #make the first pumpkin fully opaque
         self.image = pygame.image.load("icons/Pumpkin.png").convert()
         self.image.set_alpha(255)
+
         self.screen = screen
+        #it keeps track of our snek so it knows when it has collided
+        #since there can be multiple pumpkins at once, it's easier for it to keep track
         self.snake = snake
         self.width = width
         self.height = height
         self.block_size = block_size
-        self.position = self.random_pos()
+
+        #will be true with pumpkin has collided with head of the snake
         self.eaten = False
-        #will eb set to true briefly when its needed to create new pumpking
+        #will be set to true briefly when its needed to create new pumpking
         self.create_new = False
+        # will be true when pumpkin has gone through body of the snake
         self.destroy = False
+
+        #create a random position for the pumpkin
+        self.position = self.random_pos()
 
     def draw(self):
         x = self.position[0] * self.block_size
@@ -27,6 +36,7 @@ class Pumpkin():
 
     def if_collision(self):
         if not self.eaten:
+            #if it has collided with head of the snake
             if self.rect.colliderect(self.snake.rect[0]):
                 # add some transparency
                 self.image.set_alpha(100)
