@@ -4,13 +4,13 @@ from snake import Snake
 
 
 class Pumpkin():
-    def __init__(self, screen, snake: Snake, width=960, height=640, block_size=32):
+    def __init__(self, window, snake: Snake, width=960, height=640, block_size=32):
 
         #make the first pumpkin fully opaque
         self.image = pygame.image.load("icons/Pumpkin.png").convert()
         self.image.set_alpha(255)
 
-        self.screen = screen
+        self.window = window
         #it keeps track of our snek so it knows when it has collided
         #since there can be multiple pumpkins at once, it's easier for it to keep track
         self.snake = snake
@@ -32,7 +32,7 @@ class Pumpkin():
         x = self.position[0] * self.block_size
         y = self.position[1] * self.block_size
         self.rect = pygame.Rect(x, y, self.block_size, self.block_size)
-        self.screen.blit(self.image, self.rect)
+        self.window.blit(self.image, self.rect)
 
     def if_collision(self):
         if not self.eaten:
@@ -55,7 +55,7 @@ class Pumpkin():
 
     def clone(self):
         # make a clone
-        pump = Pumpkin(self.screen, self.snake, self.width, self.height, self.block_size)
+        pump = Pumpkin(self.window, self.snake, self.width, self.height, self.block_size)
         return pump
 
     def random_pos(self):

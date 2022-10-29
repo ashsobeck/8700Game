@@ -1,9 +1,9 @@
 import pygame
 
 class Snake():
-    def __init__(self, screen, width=960, height=640, block_size=32):
+    def __init__(self, window, width=960, height=640, block_size=32):
 
-        self.screen = screen
+        self.window = window
         self.width = width
         self.height = height
         self.block_size = block_size
@@ -64,10 +64,10 @@ class Snake():
 
             #if its the front of the snake show the head
             if index == 0:
-                self.screen.blit(self.head, rect)
+                self.window.blit(self.head, rect)
             #if at the end then show the tail
             elif index == self.body.__len__() - 1:
-                self.screen.blit(self.tail, rect)
+                self.window.blit(self.tail, rect)
             else:
                 #if it's in the middle then get the 2 blocks on either side
                 prev_block = self.subtract_positions(self.body[index + 1], block)
@@ -75,23 +75,23 @@ class Snake():
 
                 # body orientations: if the prev and next block are on same plane
                 if prev_block[0] == next_block[0]:
-                    self.screen.blit(self.body_vert, rect)
+                    self.window.blit(self.body_vert, rect)
                 elif prev_block[1] == next_block[1]:
-                    self.screen.blit(self.body_hori, rect)
+                    self.window.blit(self.body_hori, rect)
                 else:
                     # corners
                     if prev_block[0] == -1 and next_block[1] == -1 or \
                        prev_block[1] == -1 and next_block[0] == -1:
-                        self.screen.blit(self.body_tl, rect)
+                        self.window.blit(self.body_tl, rect)
                     elif prev_block[0] == -1 and next_block[1] == 1 or \
                          prev_block[1] == 1 and next_block[0] == -1:
-                        self.screen.blit(self.body_bl, rect)
+                        self.window.blit(self.body_bl, rect)
                     elif prev_block[0] == 1 and next_block[1] == -1 or \
                          prev_block[1] == -1 and next_block[0] == 1:
-                        self.screen.blit(self.body_tr, rect)
+                        self.window.blit(self.body_tr, rect)
                     elif prev_block[0] == 1 and next_block[1] == 1 or \
                          prev_block[1] == 1 and next_block[0] == 1:
-                        self.screen.blit(self.body_br, rect)
+                        self.window.blit(self.body_br, rect)
 
     def move_snake(self):
         # get every element except the last one since it dissappears
@@ -138,8 +138,10 @@ class Snake():
             self.head = self.head_left
         elif self.direction == 'up':
             self.head = self.head_up
-        else:
+        elif self.direction == 'down':
             self.head = self.head_down
+        else:
+            self.head = self.head_right
 
     #update the tail to be a certain image based on direction
     def update_tail(self):
