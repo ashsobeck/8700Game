@@ -22,9 +22,9 @@ pygame.display.set_caption("Haunted Ghost Snake")
 icon = pygame.image.load("icons/scream.png")
 pygame.display.set_icon(icon)
 
-screens = Screens(window, WIDTH, HEIGHT)
+screens = Screens(window, WIDTH, HEIGHT, BLOCK_SIZE)
 #create our snek
-snake = Snake(window, WIDTH, HEIGHT)
+snake = Snake(window, WIDTH, HEIGHT, BLOCK_SIZE)
 pumpkin_list = []
 #create our first pumpkin
 pumpkin_list.append(Pumpkin(window, snake))
@@ -76,8 +76,7 @@ while running:
         #reset pumpkin list
         pumpkin_list = pump_list_copy
     else:
-        screens.draw_home_buttons()
-        screens.get_difficulty()
+        screens.draw_screen()
 
     #update the display
     pygame.display.update()

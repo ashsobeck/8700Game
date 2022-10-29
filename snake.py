@@ -7,6 +7,7 @@ class Snake():
         self.width = width
         self.height = height
         self.block_size = block_size
+
         # keep track of all the snake parts
         #.set_alpha allows us to edit the transparency of our snake parts of a scale of 0-255
         #255 being opaque and 0 being fully transparent. This is responsible for calling it a "ghost" snake
@@ -171,3 +172,19 @@ class Snake():
             return True
         else:
             return False
+
+    #this function scale's up the size of the snake for drawing
+    def scale_snake(self, scale=1):
+        sanke_parts = [self.head_up, self.head_down, self.head_right, self.head_left, 
+                       self.body_hori, self.body_vert, self.tail_right, self.tail_left, 
+                       self.tail_down, self.tail_up, self.body_bl, self.body_br, 
+                       self.body_tl, self.body_tr]
+
+        #self.head_up = pygame.transform.scale(self.head_up, (64, 64))
+        #make each sanke part bigger
+        for part in sanke_parts:
+            part = pygame.transform.scale(part, (self.block_size * 2, self.block_size * 2))
+    
+    #update the rectangles if you change the body. Used in title screen
+    def update_rect(self):
+        self.rect = [pygame.Rect(l[0] * self.block_size, l[1] * self.block_size, self.block_size, self.block_size) for l in self.body]
