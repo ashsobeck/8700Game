@@ -10,7 +10,6 @@ pygame.init()
 WIDTH = 960
 HEIGHT = 640
 BLOCK_SIZE = 32
-game_start = False
 
 # set the window size
 window = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -31,8 +30,7 @@ pumpkin_list.append(Pumpkin(window, snake))
 running = True
 
 SCREEN_UPDATE = pygame.USEREVENT
-# set a timer to go off every 200 milliseconds
-
+timer_set = False
 
 while running:
     for event in pygame.event.get():
@@ -42,17 +40,17 @@ while running:
             # when the timer goes off then move the snake
             snake.move_snake()
         if event.type == pygame.KEYDOWN:
-            if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and snake.direction != 'right' and game_start:
+            if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and snake.direction != 'right':
                 snake.next_direction = 'left'
-            if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and snake.direction != 'left' and game_start:
+            if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and snake.direction != 'left':
                 snake.next_direction = 'right'
-            if (event.key == pygame.K_UP or event.key == pygame.K_w) and snake.direction != 'down' and game_start:
+            if (event.key == pygame.K_UP or event.key == pygame.K_w) and snake.direction != 'down':
                 snake.next_direction = 'up'
-            if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and snake.direction != 'up' and game_start:
+            if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and snake.direction != 'up':
                 snake.next_direction = 'down'
 
     window.blit(screens.background_image, (0, 0))
-    if game_start:
+    if screens.game_start:
         snake.draw_snake()
         #check if the snake collides with itself
         snake.if_collision()
@@ -84,7 +82,6 @@ while running:
     # this means the game operates at 60 fps, just makes the movements smoother and not choppy
     clock.tick(60)
 
-    if not game_start:
-        game_start = screens.start_game()
-        if game_start:
-            pygame.time.set_timer(SCREEN_UPDATE, screens.difficulty)
+    if screens.game_start and not timer_set:
+        pygame.time.set_timer(SCREEN_UPDATE, screens.difficulty)
+        timer_set = True
