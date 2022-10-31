@@ -58,14 +58,16 @@ class Screens:
         self.snake_color_button = pygame.image.load("icons/Buttons/Snake_Color.png").convert()
         self.init_home_buttons()
 
-        self.difficulty = MEDIUM
+        
 
         #keep track of prev color so we know what pixel color to look for when editing png files
         #keep it in a json file so we can record it from instance to instance
-        with open("icons/Snake/snake.json", "r") as j:
-            self.previous_snake_color = json.load(j)['prev_color']
-        
-        self.current_snake_color = "WHITE"
+        with open("information.json", "r") as j:
+            self.information = json.load(j)
+        self.previous_snake_color = self.information['prev_color']
+        self.current_snake_color = self.previous_snake_color
+        self.difficulty = self.information['difficulty']
+
         # ADD COLORS HERE WITH RGB VALUES. THEN ADD COLOR NAME TO LIST BELOW
         self.snake_colors = {
                              "WHITE": {"color": "WHITE", "r": 255, "g": 255, "b": 255},
@@ -78,13 +80,10 @@ class Screens:
         self.home = True
         self.background_switcher = False
         self.mouse_clicked = False
-        self.background_image = pygame.transform.scale(self.spider_webs_image, (self.width, self.height))
+        #get the background image from the image list saved in the image_list
+        self.background_image = pygame.transform.scale(self.image_list[self.information["background_image_index"]][0], (self.width, self.height))
     
     def draw_screen(self):
-        #revert snake color back to white if it was left changed
-        self.update_snake_color()
-        self.game_snake.update_snake_color()
-        self.title_snake.update_snake_color()
         self.title_snake.draw_snake()
         if self.home:
             self.draw_home_buttons()
@@ -125,14 +124,25 @@ class Screens:
             if pygame.mouse.get_pressed()[0] and not self.mouse_clicked:
                 self.difficulty = EASY
                 self.mouse_clicked = True
+                with open("information.json", "w") as j_file:
+                    self.information['difficulty'] = EASY
+                    json.dump(self.information, j_file, indent=2)
+
         elif self.medium_rect.collidepoint(m_pos):
             if pygame.mouse.get_pressed()[0] and not self.mouse_clicked:
                 self.difficulty = MEDIUM
                 self.mouse_clicked = True
+                with open("information.json", "w") as j_file:
+                    self.information['difficulty'] = MEDIUM
+                    json.dump(self.information, j_file, indent=2)
+
         elif self.hard_rect.collidepoint(m_pos):
             if pygame.mouse.get_pressed()[0] and not self.mouse_clicked:
                 self.difficulty = HARD
                 self.mouse_clicked = True
+                with open("information.json", "w") as j_file:
+                    self.information['difficulty'] = HARD
+                    json.dump(self.information, j_file, indent=2)
 
         if self.settings_rect.collidepoint(m_pos):
             if pygame.mouse.get_pressed()[0] and not self.mouse_clicked:
@@ -156,6 +166,9 @@ class Screens:
                     #make current image true
                     self.image_list[index][3] = True
                     self.background_image = pygame.transform.scale(image[0], (self.width, self.height))
+                    with open("information.json", "w") as j_file:
+                        self.information['background_image_index'] = index
+                        json.dump(self.information, j_file, indent=2)
                     self.mouse_clicked = True
 
         if self.arrow_rect.collidepoint(m_pos):
@@ -174,8 +187,9 @@ class Screens:
                 else:
                     self.current_snake_color = self.snake_colors_list[index - 1]
                 self.mouse_clicked = True
-                with open("icons/Snake/snake.json", "w") as j_file:
-                    json.dump({"prev_color": self.current_snake_color}, j_file)
+                with open("information.json", "w") as j_file:
+                    self.information['prev_color'] = self.current_snake_color
+                    json.dump(self.information, j_file, indent=2)
                 self.update_snake_color()
                 self.game_snake.update_snake_color()
                 self.title_snake.update_snake_color()
@@ -190,8 +204,9 @@ class Screens:
                 else:
                     self.current_snake_color = self.snake_colors_list[index + 1]
                 self.mouse_clicked = True
-                with open("icons/Snake/snake.json", "w") as j_file:
-                    json.dump({"prev_color": self.current_snake_color}, j_file)
+                with open("information.json", "w") as j_file:
+                    self.information['prev_color'] = self.current_snake_color
+                    json.dump(self.information, j_file, indent=2)
                 self.update_snake_color()
                 self.game_snake.update_snake_color()
                 self.title_snake.update_snake_color()
