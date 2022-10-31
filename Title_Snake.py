@@ -15,57 +15,25 @@ class Title_Snake():
         # keep track of all the snake parts
         #.set_alpha allows us to edit the transparency of our snake parts of a scale of 0-255
         #255 being opaque and 0 being fully transparent. This is responsible for calling it a "ghost" snake
-        self.head_up = pygame.image.load("icons/Snake_Head_Up.png").convert()
-        self.head_up.set_alpha(150)
-        self.head_up = pygame.transform.scale(self.head_up, (self.block_size, self.block_size))
-        self.head_down = pygame.image.load("icons/Snake_Head_Down.png").convert()
-        self.head_down.set_alpha(150)
-        self.head_down = pygame.transform.scale(self.head_down, (self.block_size, self.block_size))
-        self.head_right = pygame.image.load("icons/Snake_Head_Right.png").convert()
-        self.head_right.set_alpha(150)
-        self.head_right = pygame.transform.scale(self.head_right, (self.block_size, self.block_size))
-        self.head_left = pygame.image.load("icons/Snake_Head_Left.png").convert()
-        self.head_left.set_alpha(150)
-        self.head_left = pygame.transform.scale(self.head_left, (self.block_size, self.block_size))
+        self.head_right = pygame.image.load("icons/Snake/Snake_Head_Right.png").convert()
+        self.body_hori = pygame.image.load("icons/Snake/Snake_Body_Hori.png").convert()
+        self.body_vert = pygame.image.load("icons/Snake/Snake_Body_Vert.png").convert()
 
-        self.body_hori = pygame.image.load("icons/Snake_Body_Hori.png").convert()
-        self.body_hori.set_alpha(150)
-        self.body_hori = pygame.transform.scale(self.body_hori, (self.block_size, self.block_size))
-        self.body_vert = pygame.image.load("icons/Snake_Body_Vert.png").convert()
-        self.body_vert.set_alpha(150)
-        self.body_vert = pygame.transform.scale(self.body_vert, (self.block_size, self.block_size))
+        self.tail_up = pygame.image.load("icons/Snake/Snake_Tail_U.png").convert()
 
-        self.tail_right = pygame.image.load("icons/Snake_Tail_R.png").convert()
-        self.tail_right.set_alpha(150)
-        self.tail_right = pygame.transform.scale(self.tail_right, (self.block_size, self.block_size))
-        self.tail_left = pygame.image.load("icons/Snake_Tail_L.png").convert()
-        self.tail_left.set_alpha(150)
-        self.tail_left = pygame.transform.scale(self.tail_left, (self.block_size, self.block_size))
-        self.tail_down = pygame.image.load("icons/Snake_Tail_D.png").convert()
-        self.tail_down.set_alpha(150)
-        self.tail_down = pygame.transform.scale(self.tail_down, (self.block_size, self.block_size))
-        self.tail_up = pygame.image.load("icons/Snake_Tail_U.png").convert()
-        self.tail_up.set_alpha(150)
-        self.tail_up = pygame.transform.scale(self.tail_up, (self.block_size, self.block_size))
-
-        self.body_tr = pygame.image.load("icons/Snake_Corner_TR.png").convert()
-        self.body_tr.set_alpha(150)
-        self.body_tr = pygame.transform.scale(self.body_tr, (self.block_size, self.block_size))
-        self.body_tl = pygame.image.load("icons/Snake_Corner_TL.png").convert()
-        self.body_tl.set_alpha(150)
-        self.body_tl = pygame.transform.scale(self.body_tl, (self.block_size, self.block_size))
-        self.body_br = pygame.image.load("icons/Snake_Corner_BR.png").convert()
-        self.body_br.set_alpha(150)
-        self.body_br = pygame.transform.scale(self.body_br, (self.block_size, self.block_size))
-        self.body_bl = pygame.image.load("icons/Snake_Corner_BL.png").convert()
-        self.body_bl.set_alpha(150)
-        self.body_bl = pygame.transform.scale(self.body_bl, (self.block_size, self.block_size))
-
+        self.body_tr = pygame.image.load("icons/Snake/Snake_Corner_TR.png").convert()
+        self.body_tl = pygame.image.load("icons/Snake/Snake_Corner_TL.png").convert()
+        self.body_br = pygame.image.load("icons/Snake/Snake_Corner_BR.png").convert()
+        self.body_bl = pygame.image.load("icons/Snake/Snake_Corner_BL.png").convert()
         self.pumpkin = pygame.image.load("icons/Pumpkin.png").convert()
         self.pumpkin.set_alpha(255)
         self.pumpkin = pygame.transform.scale(self.pumpkin, (self.block_size, self.block_size))
 
+        self.images = ['self.head_right', 'self.body_hori', 'self.body_vert', 
+                       'self.tail_up', 'self.body_tr', 'self.body_tl', 'self.body_bl', 
+                       'self.body_br']
 
+        self.init_snake_body()
         self.cells_x = int(self.width/self.block_size)
         self.cells_y = int(self.height/self.block_size)
         #body from head down
@@ -150,3 +118,24 @@ class Title_Snake():
 
         for x in range(int(self.cells_x * 1/2) +  2, int(self.cells_x * 1/2) + 6):
             self.body.insert(0, [x, int(self.cells_y * 1/2) - 2])
+
+    def init_snake_body(self):
+
+        #as corny as this looks. It's the best way to edit a class variable in a loop
+        for im in self.images:
+            exec(im + ".set_alpha(150)")
+            exec(im + "= pygame.transform.scale(" + im + ", (self.block_size, self.block_size))")
+
+    #since the image png's have been update, we need to update each self variable with the new image
+    def update_snake_color(self):
+        self.head_right = pygame.image.load("icons/Snake/Snake_Head_Right.png").convert()
+        self.body_hori = pygame.image.load("icons/Snake/Snake_Body_Hori.png").convert()
+        self.body_vert = pygame.image.load("icons/Snake/Snake_Body_Vert.png").convert()
+
+        self.tail_up = pygame.image.load("icons/Snake/Snake_Tail_U.png").convert()
+
+        self.body_tr = pygame.image.load("icons/Snake/Snake_Corner_TR.png").convert()
+        self.body_tl = pygame.image.load("icons/Snake/Snake_Corner_TL.png").convert()
+        self.body_br = pygame.image.load("icons/Snake/Snake_Corner_BR.png").convert()
+        self.body_bl = pygame.image.load("icons/Snake/Snake_Corner_BL.png").convert()
+        self.init_snake_body()

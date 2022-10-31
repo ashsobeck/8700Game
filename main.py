@@ -5,6 +5,7 @@ from snake import Snake
 
 # Init pygame
 pygame.init()
+pygame.font.init()
 
 # 32 pixel images. 30 Cells in x direction, 20 cells in Y direction
 WIDTH = 960
@@ -21,9 +22,10 @@ pygame.display.set_caption("Haunted Ghost Snake")
 icon = pygame.image.load("icons/scream.png")
 pygame.display.set_icon(icon)
 
-screens = Screens(window, WIDTH, HEIGHT, BLOCK_SIZE)
+
 #create our snek
 snake = Snake(window, WIDTH, HEIGHT, BLOCK_SIZE)
+screens = Screens(window, snake, WIDTH, HEIGHT, BLOCK_SIZE)
 pumpkin_list = []
 #create our first pumpkin
 pumpkin_list.append(Pumpkin(window, snake))
