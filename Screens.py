@@ -5,12 +5,13 @@ from PIL import Image
 import os
 from Settings import Settings_Screen
 from Title_Snake import Title_Snake
+from snake import Snake
 
 EASY=350
 MEDIUM=200
 HARD=100
 class Screens:
-    def __init__(self, window, game_snake, width=960, height=640, block_size=32):
+    def __init__(self, window, game_snake: Snake, width=960, height=640, block_size=32):
         self.window = window
         self.width = width
         self.height = height
@@ -36,6 +37,7 @@ class Screens:
         with open("information.json", "r") as j:
             self.information = json.load(j)
         self.difficulty = self.information['difficulty']
+        self.game_snake.update_information(self.information)
 
         # Colors come from information.json. Add Colors in that file for the snake
         self.snake_colors = self.information['colors']

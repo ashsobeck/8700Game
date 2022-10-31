@@ -55,7 +55,8 @@ while running:
     if screens.game_start:
         snake.draw_snake()
         #check if the snake collides with itself
-        snake.if_collision()
+        if snake.if_collision():
+            pygame.quit()
 
         #make a copy before potentially modifying list of pumpkins
         pump_list_copy = pumpkin_list
@@ -66,6 +67,7 @@ while running:
             create_new, destroy = pump.if_collision()
             #clone the pumpkin and randomly place it on the map
             if create_new:
+                snake.score = snake.score + 1
                 p = pump.clone()
                 #add the new pumpking to the list
                 pump_list_copy.append(p)

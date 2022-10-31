@@ -1,4 +1,5 @@
 import pygame
+import json
 
 class Snake():
     def __init__(self, window, width=960, height=640, block_size=32):
@@ -7,6 +8,8 @@ class Snake():
         self.width = width
         self.height = height
         self.block_size = block_size
+        self.current_level = 1
+        self.score = 0
 
         # keep track of all the snake parts
         #.set_alpha allows us to edit the transparency of our snake parts of a scale of 0-255
@@ -55,6 +58,7 @@ class Snake():
     def draw_snake(self):
         self.update_head()
         self.update_tail()
+        self.draw_score()
 
         for index, block in enumerate(self.body):
             x = block[0] * self.block_size
@@ -93,6 +97,14 @@ class Snake():
                     elif prev_block[0] == 1 and next_block[1] == 1 or \
                          prev_block[1] == 1 and next_block[0] == 1:
                         self.window.blit(self.body_br, rect)
+    
+    def draw_score(self):
+        level_highscore = self.information["level_highscores"][self.current_level - 1]
+        my_font = pygame.font.SysFont('Comic Sans MS', 30, bold=True)
+        text = my_font.render("Current Score (Level High Score): " + str(self.score) 
+                              + "(" + str(level_highscore) + ")", False, (255, 255, 255))
+        text_rect = text.get_rect(topleft=(0,0))
+        self.window.blit(text, text_rect)
 
     def move_snake(self):
         # get every element except the last one since it dissappears
@@ -102,34 +114,29 @@ class Snake():
             copy = self.body[:-1]
         front = self.body[0]
         self.direction = self.next_direction
-        # Checks if its at a border then dont move the snake
-        if (front[0] != 0 and self.direction == 'left') or (
-                front[0] != 29 and self.direction == 'right') or (
-                front[1] != 0 and self.direction == 'up') or (
-                front[1] != 19 and self.direction == 'down'):
-            if self.direction == 'left':
-                # move head one block to left in x direction
-                copy.insert(0, [front[0] - 1, front[1]])
 
-            elif self.direction == 'right':
-                # move head one block to right in x direction
-                copy.insert(0, [front[0] + 1, front[1]])
-            elif self.direction == 'down':
-                # move head one block down in y direction
-                copy.insert(0, [front[0], front[1] + 1])
-            else:
-                # move head one block down in y direction
-                copy.insert(0, [front[0], front[1] - 1])
-            self.body = copy
-            if self.new_body:
-                body_pos = self.body[0]
-                #add a rect for the new block we added in the beginning of the snake
-                self.rect.insert(0, pygame.Rect(body_pos[0] * self.block_size, 
-                                                body_pos[1] * self.block_size, 
-                                                self.block_size, self.block_size))
-                self.new_body = False
+        if self.direction == 'left':
+            # move head one block to left in x direction
+            copy.insert(0, [front[0] - 1, front[1]])
+
+        elif self.direction == 'right':
+            # move head one block to right in x direction
+            copy.insert(0, [front[0] + 1, front[1]])
+        elif self.direction == 'down':
+            # move head one block down in y direction
+            copy.insert(0, [front[0], front[1] + 1])
         else:
-            print("DEAD YOU HAVE DIED WOW YOU SUCK")
+            # move head one block down in y direction
+            copy.insert(0, [front[0], front[1] - 1])
+        self.body = copy
+        if self.new_body:
+            body_pos = self.body[0]
+            #add a rect for the new block we added in the beginning of the snake
+            self.rect.insert(0, pygame.Rect(body_pos[0] * self.block_size, 
+                                            body_pos[1] * self.block_size, 
+                                            self.block_size, self.block_size))
+            self.new_body = False
+            
 
     #update the head to be a certain image based on direction
     def update_head(self):
@@ -167,11 +174,21 @@ class Snake():
 
     #returns true if the head of the snake (rect[0]) collides with any part of the rest of the snake
     def if_collision(self):
+        front = self.body[0]
         if True in [self.rect[0].colliderect(rect) for rect in self.rect[1:]]:
             print ("STOP HITTING YOURSELF")
             return True
-        else:
-            return False
+
+        w = int((self.width / self.block_size) - 1)
+        h = int((self.height / self.block_size) - 1)
+        if not ((front[0] + 1 != 0 and self.direction == 'left') or (
+                front[0] - 1 != w and self.direction == 'right') or (
+                front[1] + 1 != 0 and self.direction == 'up') or (
+                front[1] - 1!= h and self.direction == 'down')):
+            print("DEAD I SAY. U DEAD")
+            return True
+        
+        return False
 
     #since the image png's have been update, we need to update each self variable with the new image
     def update_snake_color(self):
@@ -206,3 +223,6 @@ class Snake():
         self.body_br.set_alpha(150)
         self.body_bl = pygame.image.load("icons/Snake/Snake_Corner_BL.png").convert()
         self.body_bl.set_alpha(150)
+
+    def update_information(self, information: json):
+        self.information = information
