@@ -24,32 +24,6 @@ class Screens:
         self.button_width = int(self.width/6)
         self.button_height = int(self.button_width/4)
 
-        '''
-        # will have a list of the images with three components
-        # [image surface (image.jpg), image rect (used for mouse click and placement), boolean (is this the background image)]
-        # is initialized automatically
-        self.image_list = []
-
-        self.spider_webs_image = pygame.image.load("icons/Backgrounds/Spider_webs.jpg").convert()
-        self.boards_image = pygame.image.load("icons/Backgrounds/Boards.jpg").convert()
-        self.forest_image = pygame.image.load("icons/Backgrounds/Forest.jpg").convert()
-        self.cemetary_moon_image = pygame.image.load("icons/Backgrounds/Cemetary_moon.jpg").convert()
-        self.cemetary_pump_image = pygame.image.load("icons/Backgrounds/Cemetary_Pumpkins.jpg").convert()
-        self.cemetary_image = pygame.image.load("icons/Backgrounds/Cemetary.jpg").convert()
-        self.moon_image = pygame.image.load("icons/Backgrounds/Moon.jpg").convert()
-        self.witch_image = pygame.image.load("icons/Backgrounds/Witch.jpg").convert()
-        self.scarecrow_image = pygame.image.load("icons/Backgrounds/Scarecrow.jpg").convert()
-        self.arrow = pygame.image.load("icons/Left_Arrow.png").convert()
-        self.color_left_arrow = pygame.image.load("icons/Left_Arrow.png").convert()
-        self.color_right_arrow = pygame.image.load("icons/Right_Arrow.png").convert()
-
-        # keep a list of the image names
-        self.image_names = [self.spider_webs_image, self.boards_image, self.forest_image, 
-                            self.cemetary_moon_image,self.cemetary_pump_image, self.cemetary_image, 
-                            self.moon_image, self.witch_image, self.scarecrow_image]
-        self.init_background_images()
-        '''
-
         self.start_button = pygame.image.load("icons/Buttons/Start.png").convert()
         self.easy_button = pygame.image.load("icons/Buttons/Easy.png").convert()
         self.medium_button = pygame.image.load("icons/Buttons/Medium.png").convert()
@@ -57,22 +31,15 @@ class Screens:
         self.settings_button = pygame.image.load("icons/Buttons/Settings.png").convert()
         self.init_home_buttons()
 
-        
-
         #keep track of prev color so we know what pixel color to look for when editing png files
         #keep it in a json file so we can record it from instance to instance
         with open("information.json", "r") as j:
             self.information = json.load(j)
         self.difficulty = self.information['difficulty']
 
-        # ADD COLORS HERE WITH RGB VALUES. THEN ADD COLOR NAME TO LIST BELOW
-        self.snake_colors = {
-                             "WHITE": {"color": "WHITE", "r": 255, "g": 255, "b": 255},
-                             "RED": {"color": "RED", "r": 255, "g": 0, "b": 0},
-                             "GREEN": {"color": "GREEN", "r": 0, "g": 255, "b": 0},
-                             "BLUE": {"color": "BLUE", "r": 0, "g": 0, "b": 255}
-                            }
-        self.snake_colors_list = ["WHITE", "RED", "GREEN", "BLUE"]
+        # Colors come from information.json. Add Colors in that file for the snake
+        self.snake_colors = self.information['colors']
+        self.snake_colors_list = list(self.snake_colors.keys())
 
         self.home = True
         self.settings = False
