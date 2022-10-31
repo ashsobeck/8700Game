@@ -3,6 +3,7 @@ import pygame
 import numpy as np
 from PIL import Image
 import os
+from Settings import Settings_Screen
 from Title_Snake import Title_Snake
 
 EASY=350
@@ -22,9 +23,8 @@ class Screens:
 
         self.button_width = int(self.width/6)
         self.button_height = int(self.button_width/4)
-        self.image_width = int(self.width/4)
-        self.image_height = int(self.image_width/3)
 
+        '''
         # will have a list of the images with three components
         # [image surface (image.jpg), image rect (used for mouse click and placement), boolean (is this the background image)]
         # is initialized automatically
@@ -48,14 +48,13 @@ class Screens:
                             self.cemetary_moon_image,self.cemetary_pump_image, self.cemetary_image, 
                             self.moon_image, self.witch_image, self.scarecrow_image]
         self.init_background_images()
+        '''
 
         self.start_button = pygame.image.load("icons/Buttons/Start.png").convert()
         self.easy_button = pygame.image.load("icons/Buttons/Easy.png").convert()
         self.medium_button = pygame.image.load("icons/Buttons/Medium.png").convert()
         self.hard_button = pygame.image.load("icons/Buttons/Hard.png").convert()
-        self.background_button = pygame.image.load("icons/Buttons/Background.png").convert()
         self.settings_button = pygame.image.load("icons/Buttons/Settings.png").convert()
-        self.snake_color_button = pygame.image.load("icons/Buttons/Snake_Color.png").convert()
         self.init_home_buttons()
 
         
@@ -64,8 +63,6 @@ class Screens:
         #keep it in a json file so we can record it from instance to instance
         with open("information.json", "r") as j:
             self.information = json.load(j)
-        self.previous_snake_color = self.information['prev_color']
-        self.current_snake_color = self.previous_snake_color
         self.difficulty = self.information['difficulty']
 
         # ADD COLORS HERE WITH RGB VALUES. THEN ADD COLOR NAME TO LIST BELOW
@@ -78,10 +75,12 @@ class Screens:
         self.snake_colors_list = ["WHITE", "RED", "GREEN", "BLUE"]
 
         self.home = True
-        self.background_switcher = False
+        self.settings = False
         self.mouse_clicked = False
+        self.settings_page = Settings_Screen(self.window, self.information, self.snake_colors, self.snake_colors_list,
+                                             self.width, self.height, self.block_size)
         #get the background image from the image list saved in the image_list
-        self.background_image = pygame.transform.scale(self.image_list[self.information["background_image_index"]][0], (self.width, self.height))
+        self.background_image = pygame.transform.scale(self.settings_page.image_list[self.information["background_image_index"]][0], (self.width, self.height))
     
     def draw_screen(self):
         self.title_snake.draw_snake()
@@ -89,9 +88,18 @@ class Screens:
             self.draw_home_buttons()
             self.get_click_home()
             self.start_game()
-        elif self.background_switcher:
-            self.draw_settings_selection()
-            self.get_click_settings()
+        elif self.settings:
+            self.settings_page.draw_settings_selection()
+            go_home, update_snake = self.settings_page.get_click_settings()
+            self.background_image = self.settings_page.background_image
+            if go_home:
+                self.home = True
+                self.settings = False
+            if update_snake:
+                self.update_snake_color()
+                self.game_snake.update_snake_color()
+                self.title_snake.update_snake_color()
+
 
     def draw_home_buttons(self):
         self.easy_button.set_alpha(100)
@@ -146,107 +154,14 @@ class Screens:
 
         if self.settings_rect.collidepoint(m_pos):
             if pygame.mouse.get_pressed()[0] and not self.mouse_clicked:
-                self.background_switcher = True
+                self.settings = True
                 self.home = False
                 self.mouse_clicked = True
+                # this is so the mouse won't stay click when we switch to the settings page
+                self.settings_page.mouse_clicked = True
 
         if pygame.mouse.get_pressed()[0] == False:
             self.mouse_clicked = False
-
-    #check if a button was clicked in the settings page
-    def get_click_settings(self):
-        m_pos = pygame.mouse.get_pos()
-
-        for index, image in enumerate(self.image_list):
-            rect = image[2]
-            if rect.collidepoint(m_pos):
-                if pygame.mouse.get_pressed()[0] and not self.mouse_clicked:
-                    #set all the images to false showing
-                    for im in self.image_list: im[3] = False 
-                    #make current image true
-                    self.image_list[index][3] = True
-                    self.background_image = pygame.transform.scale(image[0], (self.width, self.height))
-                    with open("information.json", "w") as j_file:
-                        self.information['background_image_index'] = index
-                        json.dump(self.information, j_file, indent=2)
-                    self.mouse_clicked = True
-
-        if self.arrow_rect.collidepoint(m_pos):
-            if pygame.mouse.get_pressed()[0] and not self.mouse_clicked:
-                self.background_switcher = False
-                self.home = True
-                self.mouse_clicked = True
-
-        if self.left_arrow_rect.collidepoint(m_pos):
-            if pygame.mouse.get_pressed()[0] and not self.mouse_clicked:
-                self.previous_snake_color = self.current_snake_color
-                index = self.snake_colors_list.index(self.current_snake_color)
-                length = len(self.snake_colors_list)
-                if index == 0:
-                    self.current_snake_color = self.snake_colors_list[length - 1]
-                else:
-                    self.current_snake_color = self.snake_colors_list[index - 1]
-                self.mouse_clicked = True
-                with open("information.json", "w") as j_file:
-                    self.information['prev_color'] = self.current_snake_color
-                    json.dump(self.information, j_file, indent=2)
-                self.update_snake_color()
-                self.game_snake.update_snake_color()
-                self.title_snake.update_snake_color()
-
-        if self.right_arrow_rect.collidepoint(m_pos):
-            if pygame.mouse.get_pressed()[0] and not self.mouse_clicked:
-                self.previous_snake_color = self.current_snake_color
-                index = self.snake_colors_list.index(self.current_snake_color)
-                length = len(self.snake_colors_list)
-                if index == length - 1:
-                    self.current_snake_color = self.snake_colors_list[0]
-                else:
-                    self.current_snake_color = self.snake_colors_list[index + 1]
-                self.mouse_clicked = True
-                with open("information.json", "w") as j_file:
-                    self.information['prev_color'] = self.current_snake_color
-                    json.dump(self.information, j_file, indent=2)
-                self.update_snake_color()
-                self.game_snake.update_snake_color()
-                self.title_snake.update_snake_color()
-        
-        if not pygame.mouse.get_pressed()[0]:
-            self.mouse_clicked = False
-
-    def draw_settings_selection(self):
-
-        #draw back arrow
-        self.window.blit(self.arrow, self.arrow_rect)
-        #draw images
-        for image in self.image_list:
-            im = image[1]
-            im_rect = image[2]
-            is_selected = image[3]
-            im.set_alpha(75) if is_selected == True else im.set_alpha(200)
-            self.window.blit(im, im_rect)
-
-        #draw color on bottom
-        color = self.snake_colors[self.current_snake_color]
-        my_font = pygame.font.SysFont('Comic Sans MS', 50, bold=True)
-        text = my_font.render(color["color"], False, (color["r"], color["g"], color["b"]))
-        text_rect = text.get_rect(center=(self.width/2, self.height - self.height/6))
-
-        #place color arrows coordinates
-        self.left_arrow_rect = self.color_left_arrow.get_rect(center=(self.width/3, self.height - self.height/6))
-        self.right_arrow_rect = self.color_right_arrow.get_rect(center=(2*self.width/3, self.height - self.height/6))
-        self.color_left_arrow.set_alpha(200)
-        self.color_right_arrow.set_alpha(200)
-
-        #place labels coordinates
-        background_rect = self.background_button.get_rect(center=(self.width/2, self.arrow_rect.centery))
-        snake_color_rect = self.snake_color_button.get_rect(center=(self.width/2, text_rect.centery - 50))
-
-        self.window.blit(text, text_rect)
-        self.window.blit(self.background_button, background_rect)
-        self.window.blit(self.snake_color_button, snake_color_rect)
-        self.window.blit(self.color_left_arrow, self.left_arrow_rect)
-        self.window.blit(self.color_right_arrow, self.right_arrow_rect)
         
 
     def init_home_buttons(self):
@@ -270,30 +185,6 @@ class Screens:
         self.settings_rect = self.settings_button.get_rect()
         self.settings_rect.topleft = (self.width/5, self.height * (1/2))
 
-        self.background_button = pygame.transform.scale(self.background_button, (self.button_width, self.button_height))
-        self.snake_color_button = pygame.transform.scale(self.snake_color_button, (self.button_width, self.button_height))
-
-    def init_background_images(self):
-        im_wid = int(self.width/10)
-        im_height = int(self.height/4)
-
-        self.arrow = pygame.transform.scale(self.arrow, (self.block_size * 2, self.block_size * 2))
-        self.arrow_rect = self.arrow.get_rect()
-        self.arrow_rect.topleft = (im_wid, im_height - self.image_height - 20)
-        self.arrow.set_alpha(200)
-
-        for index, image in enumerate(self.image_names):
-
-            im_small = pygame.transform.scale(image, (self.image_width, self.image_height))
-            im_rect = im_small.get_rect()
-            row = int(index/3)
-            col = (index % 3)
-            im_rect.topleft = (im_wid + col * (self.image_width + 20), im_height + row * (self.image_height + 20))
-            self.image_list.append([image, im_small, im_rect, False])
-
-        #set first image to be the background
-        self.image_list[0][3] = True
-
     def update_snake_color(self):
         #loop through ever snake png and change the color
         dir = 'icons/Snake/'
@@ -305,14 +196,14 @@ class Screens:
                 data = np.array(im)
 
                 # orig color values
-                r1 = self.snake_colors[self.previous_snake_color]["r"]
-                g1 = self.snake_colors[self.previous_snake_color]["g"]
-                b1 = self.snake_colors[self.previous_snake_color]["b"]
+                r1 = self.snake_colors[self.settings_page.previous_snake_color]["r"]
+                g1 = self.snake_colors[self.settings_page.previous_snake_color]["g"]
+                b1 = self.snake_colors[self.settings_page.previous_snake_color]["b"]
 
                 #new color vlaues
-                r2 = self.snake_colors[self.current_snake_color]["r"]
-                g2 = self.snake_colors[self.current_snake_color]["g"]
-                b2 = self.snake_colors[self.current_snake_color]["b"]
+                r2 = self.snake_colors[self.settings_page.current_snake_color]["r"]
+                g2 = self.snake_colors[self.settings_page.current_snake_color]["g"]
+                b2 = self.snake_colors[self.settings_page.current_snake_color]["b"]
 
                 # get the current rgb values from the image
                 red, green, blue = data[:,:,0], data[:,:,1], data[:,:,2]
