@@ -11,12 +11,13 @@ EASY=350
 MEDIUM=200
 HARD=100
 class Screens:
-    def __init__(self, window, game_snake: Snake, width=960, height=640, block_size=32):
+    def __init__(self, window, game_snake: Snake, information: json, width=960, height=640, block_size=32):
         self.window = window
         self.width = width
         self.height = height
         self.block_size = block_size
         self.game_start = False
+        self.information = information
 
         #create dummy snake. This is so we can use the images for our background
         self.title_snake = Title_Snake(self.window, self.width, self.height, self.block_size * 2)
@@ -31,13 +32,9 @@ class Screens:
         self.hard_button = pygame.image.load("icons/Buttons/Hard.png").convert()
         self.settings_button = pygame.image.load("icons/Buttons/Settings.png").convert()
         self.init_home_buttons()
-
-        #keep track of prev color so we know what pixel color to look for when editing png files
-        #keep it in a json file so we can record it from instance to instance
-        with open("information.json", "r") as j:
-            self.information = json.load(j)
+     
         self.difficulty = self.information['difficulty']
-        self.game_snake.update_information(self.information)
+        self.game_snake.update_difficulty(self.difficulty)
 
         # Colors come from information.json. Add Colors in that file for the snake
         self.snake_colors = self.information['colors']
@@ -104,6 +101,7 @@ class Screens:
                 with open("information.json", "w") as j_file:
                     self.information['difficulty'] = EASY
                     json.dump(self.information, j_file, indent=2)
+                self.game_snake.update_difficulty(self.difficulty)
 
         elif self.medium_rect.collidepoint(m_pos):
             if pygame.mouse.get_pressed()[0] and not self.mouse_clicked:
@@ -112,6 +110,7 @@ class Screens:
                 with open("information.json", "w") as j_file:
                     self.information['difficulty'] = MEDIUM
                     json.dump(self.information, j_file, indent=2)
+                self.game_snake.update_difficulty(self.difficulty)
 
         elif self.hard_rect.collidepoint(m_pos):
             if pygame.mouse.get_pressed()[0] and not self.mouse_clicked:
@@ -120,6 +119,7 @@ class Screens:
                 with open("information.json", "w") as j_file:
                     self.information['difficulty'] = HARD
                     json.dump(self.information, j_file, indent=2)
+                self.game_snake.update_difficulty(self.difficulty)
 
         if self.settings_rect.collidepoint(m_pos):
             if pygame.mouse.get_pressed()[0] and not self.mouse_clicked:

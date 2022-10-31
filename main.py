@@ -1,4 +1,5 @@
 import pygame
+import json
 from Screens import Screens
 from pumpkin import Pumpkin
 from snake import Snake
@@ -22,10 +23,15 @@ pygame.display.set_caption("Haunted Ghost Snake")
 icon = pygame.image.load("icons/scream.png")
 pygame.display.set_icon(icon)
 
+#keep track of prev color so we know what pixel color to look for when editing png files
+#keep it in a json file so we can record it from instance to instance
+with open("information.json", "r") as j:
+    information = json.load(j)
+
 
 #create our snek
-snake = Snake(window, WIDTH, HEIGHT, BLOCK_SIZE)
-screens = Screens(window, snake, WIDTH, HEIGHT, BLOCK_SIZE)
+snake = Snake(window, information, WIDTH, HEIGHT, BLOCK_SIZE)
+screens = Screens(window, snake, information, WIDTH, HEIGHT, BLOCK_SIZE)
 pumpkin_list = []
 #create our first pumpkin
 pumpkin_list.append(Pumpkin(window, snake))
@@ -71,6 +77,12 @@ while running:
                 p = pump.clone()
                 #add the new pumpking to the list
                 pump_list_copy.append(p)
+                #update the score of he difficulty and level in the json file
+                high_score = information['level_highscores'][snake.current_level - 1][str(snake.difficulty)]
+                with open("information.json", "w") as j_file:
+                    if snake.score > high_score:
+                        information['level_highscores'][snake.current_level - 1][str(snake.difficulty)] = snake.score
+                        json.dump(information, j_file, indent=2)
             #if the eaten pumpkin has gone through the whole snake, remove from list
             if destroy:
                 #removes specific class instance from list

@@ -1,8 +1,11 @@
 import pygame
 import json
 
+EASY = 350
+MEDIUM = 200
+HARD = 100
 class Snake():
-    def __init__(self, window, width=960, height=640, block_size=32):
+    def __init__(self, window, information: json, width=960, height=640, block_size=32):
 
         self.window = window
         self.width = width
@@ -10,6 +13,7 @@ class Snake():
         self.block_size = block_size
         self.current_level = 1
         self.score = 0
+        self.information = information
 
         # keep track of all the snake parts
         #.set_alpha allows us to edit the transparency of our snake parts of a scale of 0-255
@@ -99,10 +103,13 @@ class Snake():
                         self.window.blit(self.body_br, rect)
     
     def draw_score(self):
-        level_highscore = self.information["level_highscores"][self.current_level - 1]
+        level_highscore = self.information["level_highscores"][self.current_level - 1][str(self.difficulty)]
+        if self.difficulty == EASY: dif = "Easy"
+        elif self.difficulty == MEDIUM: dif = "Medium"
+        elif self.difficulty == HARD: dif = "Hard"
+        text_string = "Current " + dif + " Score (Level High Score): " + str(self.score) + "(" + str(level_highscore) + ")"
         my_font = pygame.font.SysFont('Comic Sans MS', 30, bold=True)
-        text = my_font.render("Current Score (Level High Score): " + str(self.score) 
-                              + "(" + str(level_highscore) + ")", False, (255, 255, 255))
+        text = my_font.render(text_string, False, (255, 255, 255))
         text_rect = text.get_rect(topleft=(0,0))
         self.window.blit(text, text_rect)
 
@@ -224,5 +231,5 @@ class Snake():
         self.body_bl = pygame.image.load("icons/Snake/Snake_Corner_BL.png").convert()
         self.body_bl.set_alpha(150)
 
-    def update_information(self, information: json):
-        self.information = information
+    def update_difficulty(self, difficulty: int):
+        self.difficulty = difficulty
