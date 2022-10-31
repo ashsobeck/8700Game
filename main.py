@@ -79,11 +79,11 @@ while running:
                 pump_list_copy.append(p)
                 #update the score of he difficulty and level in the json file
                 high_score = information['level_highscores'][snake.current_level - 1][str(snake.difficulty)]
-                with open("information.json", "w") as j_file:
-                    if snake.score > high_score:
+                if snake.score > high_score:
+                    with open("information.json", "w") as j_file:
                         information['level_highscores'][snake.current_level - 1][str(snake.difficulty)] = snake.score
                         json.dump(information, j_file, indent=2)
-            #if the eaten pumpkin has gone through the whole snake, remove from list
+        #if the eaten pumpkin has gone through the whole snake, remove from list
             if destroy:
                 #removes specific class instance from list
                 pump_list_copy.remove(pump)
