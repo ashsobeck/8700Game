@@ -17,8 +17,8 @@ class Settings_Screen:
         self.button_height = int(self.button_width/4)
         self.image_width = int(self.width/4)
         self.image_height = int(self.image_width/3)
-        # will have a list of the images with three components
-        # [image surface (image.jpg), image rect (used for mouse click and placement), boolean (is this the background image)]
+        # will have a list of the images with 4 components
+        # [image surface (image.jpg), scaled down image, image rect (used for mouse click and placement), boolean (is this the background image)]
         # is initialized automatically
         self.image_list = []
 
@@ -46,6 +46,8 @@ class Settings_Screen:
                             self.moon_image, self.witch_image, self.scarecrow_image]
         self.init_background_images()
         self.background_image = pygame.transform.scale(self.image_list[self.information["background_image_index"]][0], (self.width, self.height))
+        #set image background to true in the image list
+        self.image_list[self.information["background_image_index"]][3] = True
 
 
     def draw_settings_selection(self):
@@ -163,9 +165,6 @@ class Settings_Screen:
             col = (index % 3)
             im_rect.topleft = (im_wid + col * (self.image_width + 20), im_height + row * (self.image_height + 20))
             self.image_list.append([image, im_small, im_rect, False])
-
-        #set first image to be the background
-        self.image_list[0][3] = True
 
         self.background_button = pygame.transform.scale(self.background_button, (self.button_width, self.button_height))
         self.snake_color_button = pygame.transform.scale(self.snake_color_button, (self.button_width, self.button_height))
