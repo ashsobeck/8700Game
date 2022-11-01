@@ -48,7 +48,7 @@ class Screens:
         #get the background image from the image list saved in the image_list
         self.background_image = pygame.transform.scale(self.settings_page.image_list[self.information["background_image_index"]][0], (self.width, self.height))
     
-    def draw_screen(self):
+    def draw_menu(self):
         self.title_snake.draw_snake()
         if self.home:
             self.draw_home_buttons()

@@ -32,9 +32,6 @@ with open("information.json", "r") as j:
 #create our snek
 snake = Snake(window, information, WIDTH, HEIGHT, BLOCK_SIZE)
 screens = Screens(window, snake, information, WIDTH, HEIGHT, BLOCK_SIZE)
-pumpkin_list = []
-#create our first pumpkin
-pumpkin_list.append(Pumpkin(window, snake))
 running = True
 
 SCREEN_UPDATE = pygame.USEREVENT
@@ -58,39 +55,21 @@ while running:
                 snake.next_direction = 'down'
 
     window.blit(screens.background_image, (0, 0))
-    if screens.game_start:
-        snake.draw_snake()
-        #check if the snake collides with itself
-        if snake.if_collision():
-            pygame.quit()
 
-        #make a copy before potentially modifying list of pumpkins
-        pump_list_copy = pumpkin_list
-        #for each pumpkin
-        for pump in pumpkin_list:
-            pump.draw()
-            #pumpking checks if it has collided with the snake head
-            create_new, destroy = pump.if_collision()
-            #clone the pumpkin and randomly place it on the map
-            if create_new:
-                snake.score = snake.score + 1
-                p = pump.clone()
-                #add the new pumpking to the list
-                pump_list_copy.append(p)
-                #update the score of he difficulty and level in the json file
-                high_score = information['level_highscores'][snake.current_level - 1][str(snake.difficulty)]
-                if snake.score > high_score:
-                    with open("information.json", "w") as j_file:
-                        information['level_highscores'][snake.current_level - 1][str(snake.difficulty)] = snake.score
-                        json.dump(information, j_file, indent=2)
-        #if the eaten pumpkin has gone through the whole snake, remove from list
-            if destroy:
-                #removes specific class instance from list
-                pump_list_copy.remove(pump)
-        #reset pumpkin list
-        pumpkin_list = pump_list_copy
+    if screens.game_start:
+        #draw snek
+        snake.draw_snake()
+
+        # will check if the snake has eaten a pumpkin and will create
+        # a new pumpkin as well as elongate the snake.
+        # will also draw the pumpkins on the screen
+        snake.if_eat_pumpkin()
+
+        #check if the snake collides with itself or border
+        if snake.if_death():
+            pygame.quit()
     else:
-        screens.draw_screen()
+        screens.draw_menu()
 
     #update the display
     pygame.display.update()

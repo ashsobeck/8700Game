@@ -1,5 +1,6 @@
 import pygame
 import json
+from pumpkin import Pumpkin
 
 EASY = 350
 MEDIUM = 200
@@ -14,6 +15,7 @@ class Snake():
         self.current_level = 1
         self.score = 0
         self.information = information
+        self.pumpkin_list = [Pumpkin(self.window)]
 
         # keep track of all the snake parts
         #.set_alpha allows us to edit the transparency of our snake parts of a scale of 0-255
@@ -55,6 +57,7 @@ class Snake():
         # the body keeps track of the positon of each body part
         # for simplicity we will keep track of what cell its in
         self.body = [[15, 10], [14, 10], [13, 10], [12, 10], [11, 10], [10, 10], [9, 10]]
+        self.pumpkin_list[0].random_pos(self.body)
         # this will hold the rectangles of each block. Used in collision detection
         self.rect = [pygame.Rect(l[0] * self.block_size, l[1] * self.block_size, self.block_size, self.block_size) for l in self.body]
         self.new_body = False
@@ -101,13 +104,14 @@ class Snake():
                     elif prev_block[0] == 1 and next_block[1] == 1 or \
                          prev_block[1] == 1 and next_block[0] == 1:
                         self.window.blit(self.body_br, rect)
+                        
     
     def draw_score(self):
         level_highscore = self.information["level_highscores"][self.current_level - 1][str(self.difficulty)]
         if self.difficulty == EASY: dif = "Easy"
         elif self.difficulty == MEDIUM: dif = "Medium"
         elif self.difficulty == HARD: dif = "Hard"
-        text_string = "Current " + dif + " Score (Level High Score): " + str(self.score) + "(" + str(level_highscore) + ")"
+        text_string = "Current Score (Level High Score): " + dif + " " + str(self.score) + "(" + str(level_highscore) + ")"
         my_font = pygame.font.SysFont('Comic Sans MS', 30, bold=True)
         text = my_font.render(text_string, False, (255, 255, 255))
         text_rect = text.get_rect(topleft=(0,0))
@@ -180,7 +184,7 @@ class Snake():
         return final_position
 
     #returns true if the head of the snake (rect[0]) collides with any part of the rest of the snake
-    def if_collision(self):
+    def if_death(self):
         front = self.body[0]
         if True in [self.rect[0].colliderect(rect) for rect in self.rect[1:]]:
             print ("STOP HITTING YOURSELF")
@@ -196,6 +200,35 @@ class Snake():
             return True
         
         return False
+
+    def if_eat_pumpkin(self):
+        #make a copy before potentially modifying list of pumpkins
+        pump_list_copy = self.pumpkin_list
+        #for each pumpkin
+        for pump in self.pumpkin_list:
+            pump.draw()
+            #pumpking checks if it has collided with the snake head
+            create_new, destroy = pump.if_collision(self.rect)
+            #clone the pumpkin and randomly place it on the map
+            if create_new:
+                self.new_body = True
+                self.score += 1
+                p = pump.clone()
+                p.random_pos(self.body)
+                #add the new pumpking to the list
+                pump_list_copy.append(p)
+                #update the score of he difficulty and level in the json file
+                high_score = self.information['level_highscores'][self.current_level - 1][str(self.difficulty)]
+                if self.score > high_score:
+                    with open("information.json", "w") as j_file:
+                        self.information['level_highscores'][self.current_level - 1][str(self.difficulty)] = self.score
+                        json.dump(self.information, j_file, indent=2)
+        #if the eaten pumpkin has gone through the whole snake, remove from list
+            if destroy:
+                #removes specific class instance from list
+                pump_list_copy.remove(pump)
+        #reset pumpkin list
+        self.pumpkin_list = pump_list_copy
 
     #since the image png's have been update, we need to update each self variable with the new image
     def update_snake_color(self):
