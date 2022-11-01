@@ -53,7 +53,6 @@ class Screens:
         if self.home:
             self.draw_home_buttons()
             self.get_click_home()
-            self.start_game()
         elif self.settings:
             self.settings_page.draw_settings_selection()
             go_home, update_snake = self.settings_page.get_click_settings()
@@ -83,16 +82,14 @@ class Screens:
         self.window.blit(self.hard_button, self.hard_rect)
         self.window.blit(self.settings_button, self.settings_rect)
 
-    def start_game(self):
+
+    def get_click_home(self):
         m_pos = pygame.mouse.get_pos()
 
         if self.start_rect.collidepoint(m_pos):
             if pygame.mouse.get_pressed()[0] and not self.mouse_clicked:
                 self.game_start = True
                 self.mouse_clicked = True
-
-    def get_click_home(self):
-        m_pos = pygame.mouse.get_pos()
 
         if self.easy_rect.collidepoint(m_pos):
             if pygame.mouse.get_pressed()[0] and not self.mouse_clicked:
