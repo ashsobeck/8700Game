@@ -33,6 +33,7 @@ with open("information.json", "r") as j:
 snake = Snake(window, information, WIDTH, HEIGHT, BLOCK_SIZE)
 screens = Screens(window, snake, information, WIDTH, HEIGHT, BLOCK_SIZE)
 running = True
+snake_alive = True
 
 SCREEN_UPDATE = pygame.USEREVENT
 timer_set = False
@@ -41,7 +42,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == SCREEN_UPDATE:
+        if event.type == SCREEN_UPDATE and snake_alive and screens.game_start:
             # when the timer goes off then move the snake
             snake.move_snake()
         if event.type == pygame.KEYDOWN:
@@ -53,6 +54,14 @@ while running:
                 snake.next_direction = 'up'
             if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and snake.direction != 'up':
                 snake.next_direction = 'down'
+            if not snake_alive:
+                if event.key == pygame.K_SPACE:
+                    #make a new snake
+                    snake = Snake(window, information, WIDTH, HEIGHT, BLOCK_SIZE)
+                    snake.update_difficulty(screens.difficulty)
+                    screens.game_start = False
+                    snake_alive = True
+                    timer_set = False
 
     window.blit(screens.background_image, (0, 0))
 
@@ -67,7 +76,8 @@ while running:
 
         #check if the snake collides with itself or border
         if snake.if_death():
-            pygame.quit()
+            snake_alive = False
+            snake.draw_death()
     else:
         screens.draw_menu()
 

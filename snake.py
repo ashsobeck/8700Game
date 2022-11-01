@@ -117,6 +117,25 @@ class Snake():
         text_rect = text.get_rect(topleft=(0,0))
         self.window.blit(text, text_rect)
 
+    def draw_death(self):
+        death_screen = pygame.Surface((self.width, self.height))
+        death_screen.set_alpha(150)
+        death_screen.fill((255,255,255))
+        font_size = 30
+        my_font = pygame.font.SysFont('Comic Sans MS', font_size, bold=True)
+
+        score_string = "Score: " + str(self.score)
+        score_text = my_font.render(score_string, False, (0, 0, 0))
+        score_rect = score_text.get_rect(center=(self.width/2, self.height/2))
+
+        space_string = "Press the SpaceBar to continue"
+        space_text = my_font.render(space_string, False, (0, 0, 0))
+        space__rect = space_text.get_rect(center=(self.width/2, self.height/2 + font_size))
+
+        self.window.blit(death_screen, (0,0))
+        self.window.blit(score_text, score_rect)
+        self.window.blit(space_text, space__rect)
+    
     def move_snake(self):
         # get every element except the last one since it dissappears
         if self.new_body:
