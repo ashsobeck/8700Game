@@ -160,16 +160,21 @@ class Screens:
                 name = dir + str(images)
                 im = Image.open(name)
                 data = np.array(im)
+                hex_prev = self.snake_colors[self.settings_page.previous_snake_color]['hex'].lstrip('#')
+                prev_color = list(int(hex_prev[i:i+2], 16) for i in (0, 2, 4))
+
+                hex_new = self.snake_colors[self.settings_page.current_snake_color]['hex'].lstrip('#')
+                new_color = list(int(hex_new[i:i+2], 16) for i in (0, 2, 4))
 
                 # orig color values
-                r1 = self.snake_colors[self.settings_page.previous_snake_color]["r"]
-                g1 = self.snake_colors[self.settings_page.previous_snake_color]["g"]
-                b1 = self.snake_colors[self.settings_page.previous_snake_color]["b"]
+                r1 = prev_color[0]
+                g1 = prev_color[1]
+                b1 = prev_color[2]
 
                 #new color vlaues
-                r2 = self.snake_colors[self.settings_page.current_snake_color]["r"]
-                g2 = self.snake_colors[self.settings_page.current_snake_color]["g"]
-                b2 = self.snake_colors[self.settings_page.current_snake_color]["b"]
+                r2 = new_color[0]
+                g2 = new_color[1]
+                b2 = new_color[2]
 
                 # get the current rgb values from the image
                 red, green, blue = data[:,:,0], data[:,:,1], data[:,:,2]

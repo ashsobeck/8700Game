@@ -63,9 +63,13 @@ class Settings_Screen:
             self.window.blit(im, im_rect)
 
         #draw color on bottom
+        # get new color hex and convert to rgb
         color = self.snake_colors[self.current_snake_color]
+        color_hex = color['hex'].lstrip('#')
+        color_val = tuple(int(color_hex[i:i+2], 16) for i in (0, 2, 4))
+        
         my_font = pygame.font.SysFont('Comic Sans MS', 50, bold=True)
-        text = my_font.render(color["color"], False, (color["r"], color["g"], color["b"]))
+        text = my_font.render(color["color"], False, color_val)
         text_rect = text.get_rect(center=(self.width/2, self.height - self.height/6))
 
         #place color arrows coordinates
