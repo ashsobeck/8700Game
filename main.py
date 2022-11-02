@@ -58,6 +58,7 @@ while running:
                 if event.key == pygame.K_SPACE:
                     #make a new snake
                     snake = Snake(window, information, WIDTH, HEIGHT, BLOCK_SIZE)
+                    screens.game_snake = snake
                     snake.update_difficulty(screens.difficulty)
                     screens.game_start = False
                     snake_alive = True
