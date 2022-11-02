@@ -65,16 +65,16 @@ class Settings_Screen:
         #draw color on bottom
         # get new color hex and convert to rgb
         color = self.snake_colors[self.current_snake_color]
-        color_hex = color['hex'].lstrip('#')
+        color_hex = color['hex']
         color_val = tuple(int(color_hex[i:i+2], 16) for i in (0, 2, 4))
         
-        my_font = pygame.font.SysFont('Comic Sans MS', 50, bold=True)
+        my_font = pygame.font.SysFont('Comic Sans MS', int(self.width/20), bold=True)
         text = my_font.render(color["color"], False, color_val)
-        text_rect = text.get_rect(center=(self.width/2, self.height - self.height/6))
+        text_rect = text.get_rect(center=(self.width/2, 5*self.height/6))
 
         #place color arrows coordinates
-        self.left_arrow_rect = self.color_left_arrow.get_rect(center=(self.width/3, self.height - self.height/6))
-        self.right_arrow_rect = self.color_right_arrow.get_rect(center=(2*self.width/3, self.height - self.height/6))
+        self.left_arrow_rect = self.color_left_arrow.get_rect(center=(2*self.width/7, 5*self.height/6))
+        self.right_arrow_rect = self.color_right_arrow.get_rect(center=(5*self.width/7, 5*self.height/6))
         self.color_left_arrow.set_alpha(200)
         self.color_right_arrow.set_alpha(200)
 

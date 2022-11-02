@@ -5,26 +5,50 @@
   "colors": {
     "WHITE": {
       "color": "WHITE",
-      "hex": "#FFFFFF"
+      "hex": "FFFFFF"
     },
     "RED": {
       "color": "RED",
-      "hex": "#FF0000"
+      "hex": "FF0000"
+    },
+    "LIGHT RED": {
+      "color": "Light RED",
+      "hex": "FF3333"
+    },
+    "ORANGE": {
+      "color": "ORANGE",
+      "hex": "FF8000"
+    },
+    "YELLOW": {
+      "color": "YELLOW",
+      "hex": "FFFF00"
+    },
+    "SAGE GREEN": {
+      "color": "SAGE GREEN",
+      "hex": "66FF66"
     },
     "GREEN": {
       "color": "GREEN",
-      "hex": "#00FF00"
+      "hex": "00FF00"
+    },
+    "BABY BLUE": {
+      "color": "BABY BLUE",
+      "hex": "00FFFF"
     },
     "BLUE": {
       "color": "BLUE",
-      "hex": "#0000FF"
+      "hex": "0000FF"
+    },
+    "PURPLE": {
+      "color": "PURPLE",
+      "hex": "7000FF"
     }
   },
   "level_highscores": [
     {
       "350": 0,
-      "200": 0,
-      "100": 6
+      "200": 8,
+      "100": 18
     }
   ]
 }

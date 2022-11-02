@@ -160,10 +160,10 @@ class Screens:
                 name = dir + str(images)
                 im = Image.open(name)
                 data = np.array(im)
-                hex_prev = self.snake_colors[self.settings_page.previous_snake_color]['hex'].lstrip('#')
+                hex_prev = self.snake_colors[self.settings_page.previous_snake_color]['hex']
                 prev_color = list(int(hex_prev[i:i+2], 16) for i in (0, 2, 4))
 
-                hex_new = self.snake_colors[self.settings_page.current_snake_color]['hex'].lstrip('#')
+                hex_new = self.snake_colors[self.settings_page.current_snake_color]['hex']
                 new_color = list(int(hex_new[i:i+2], 16) for i in (0, 2, 4))
 
                 # orig color values
