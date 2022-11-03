@@ -6,7 +6,7 @@ class Pumpkin():
     def __init__(self, window, width=960, height=640, block_size=32):
 
         #make the pumpkin fully opaque
-        self.image = pygame.image.load("icons/Pumpkin.png").convert()
+        self.image = pygame.image.load("icons/pumpkin.png").convert()
         self.image.set_alpha(255)
 
         self.window = window
