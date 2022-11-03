@@ -126,7 +126,7 @@ class Screens:
                 # this is so the mouse won't stay click when we switch to the settings page
                 self.settings_page.mouse_clicked = True
 
-        if pygame.mouse.get_pressed()[0] == False:
+        if pygame.mouse.get_pressed()[0] is False:
             self.mouse_clicked = False
         
 
@@ -153,11 +153,11 @@ class Screens:
 
     def update_snake_color(self):
         #loop through ever snake png and change the color
-        dir = 'icons/Snake/'
-        for images in os.listdir(dir):
+        icon_dir = 'icons/Snake/'
+        for images in os.listdir(icon_dir):
             if images.endswith('.png'):
 
-                name = dir + str(images)
+                name = icon_dir + str(images)
                 im = Image.open(name)
                 data = np.array(im)
                 hex_prev = self.snake_colors[self.settings_page.previous_snake_color]['hex']

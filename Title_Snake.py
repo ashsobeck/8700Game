@@ -25,7 +25,7 @@ class Title_Snake():
         self.body_tl = pygame.image.load("icons/Snake/Snake_Corner_TL.png").convert()
         self.body_br = pygame.image.load("icons/Snake/Snake_Corner_BR.png").convert()
         self.body_bl = pygame.image.load("icons/Snake/Snake_Corner_BL.png").convert()
-        self.pumpkin = pygame.image.load("icons/Pumpkin.png").convert()
+        self.pumpkin = pygame.image.load("icons/pumpkin.png").convert()
         self.pumpkin.set_alpha(255)
         self.pumpkin = pygame.transform.scale(self.pumpkin, (self.block_size, self.block_size))
 
