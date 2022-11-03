@@ -185,4 +185,3 @@ class Screens:
 
                 im = Image.fromarray(data)
                 im.save(name)
- 
