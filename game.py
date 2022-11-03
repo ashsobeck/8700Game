@@ -67,9 +67,9 @@ class Game(object):
                         snake.next_direction = 'down'
                     if not snake_alive:
                         if event.key == pygame.K_SPACE:
-                            #make a new snake
-                            snake = Snake(window, information, self.width, self.height,
-                                            self.block_size)
+                            # make a new snake
+                            snake = Snake(window, information, self.width,
+                                          self.height, self.block_size)
                             screens.game_snake = snake
                             snake.update_difficulty(screens.difficulty)
                             screens.game_start = False
@@ -94,10 +94,11 @@ class Game(object):
             else:
                 screens.draw_menu()
 
-            #update the display
+            # update the display
             pygame.display.update()
 
-            # this means the game operates at 60 fps, just makes the movements smoother and not choppy
+            # this means the game operates at 60 fps, just makes the movements
+            # smoother and not choppy
             clock.tick(60)
 
             if screens.game_start and not timer_set:
@@ -111,4 +112,3 @@ class Game(object):
 
 
 # set the icon and game name
-
