@@ -50,7 +50,7 @@ class Screens:
         self.mouse_clicked = False
         self.settings_page = Settings_Screen(self.window, self.information, self.snake_colors, self.snake_colors_list,
                                              self.width, self.height, self.block_size)
-        self.levels_page = Levels(self.window, self.width, self.height, self.block_size, self.information)
+        self.levels_class = Levels(self.window, self.width, self.height, self.block_size, self.information)
         # get the background image from the image list saved in the image_list
         self.background_image = pygame.transform.scale(self.settings_page.image_list[self.information["background_image_index"]][0], (self.width, self.height))
 
@@ -71,8 +71,8 @@ class Screens:
                 self.game_snake.update_snake_color()
                 self.title_snake.update_snake_color()
         elif self.levels:
-            self.levels_page.draw_levels_screen(self.background_image)
-            self.levels = self.levels_page.get_click()
+            self.levels_class.draw_levels_screen(self.background_image)
+            self.levels = self.levels_class.get_click()
             if not self.levels:
                 self.home = True
 
@@ -143,7 +143,7 @@ class Screens:
                 self.home = False
                 self.mouse_clicked = True
                 # this is so the mouse won't stay click when we switch to the levels page
-                self.levels_page.mouse_clicked = True
+                self.levels_class.mouse_clicked = True
 
         if pygame.mouse.get_pressed()[0] is False:
             self.mouse_clicked = False

@@ -49,12 +49,16 @@ class Game(object):
             information = json.load(j)
 
         # create our snek
-        snake = Snake(window, information, self.width,
+        snake = Snake(window, self.width,
                       self.height, self.block_size)
         screens = Screens(window, snake, information, self.width, self.height, self.block_size)
         running = True
         snake_alive = True
         blockers = self.make_blockers(window, snake.body) 
+        pumpkin_list = [Pumpkin(window)]
+        pumpkin_list[0].random_pos(snake.body, screens.levels_class.current_level_coord)
+        selected_level = screens.levels_class.selected_level
+        snake.level_highscore = information['level_highscores'][selected_level][str(snake.difficulty)]
 
         SCREEN_UPDATE = pygame.USEREVENT
         timer_set = False
@@ -78,34 +82,71 @@ class Game(object):
                     if not snake_alive:
                         if event.key == pygame.K_SPACE:
                             # make a new snake
-                            snake = Snake(window, information, self.width,
+                            snake = Snake(window, self.width,
                                           self.height, self.block_size)
                             screens.game_snake = snake
                             snake.update_difficulty(screens.difficulty)
+                            snake.level_highscore = information['level_highscores'][selected_level][str(snake.difficulty)]
                             screens.game_start = False
                             snake_alive = True
                             timer_set = False
                             blockers = self.make_blockers(window, snake.body)
+                            pumpkin_list = [Pumpkin(window)]
+                            pumpkin_list[0].random_pos(snake.body, screens.levels_class.current_level_coord)
 
             window.blit(screens.background_image, (0, 0))
 
             if screens.game_start:
-                for block in blockers:
-                    block.draw()
+                screens.levels_class.draw_level()
+                #for block in blockers:
+                    #block.draw()
                 # draw snek
                 snake.draw_snake()
 
                 # will check if the snake has eaten a pumpkin and will create
                 # a new pumpkin as well as elongate the snake.
                 # will also draw the pumpkins on the screen
-                snake.if_eat_pumpkin()
+                pump_list_copy = pumpkin_list
+                # for each pumpkin
+                for pump in pumpkin_list:
+                    pump.draw()
+                    # pumpking checks if it has collided with the snake
+                    create_new, destroy = pump.if_collision(snake.rect)
+                    # clone the pumpkin and randomly place it on the map
+                    if create_new:
+                        snake.new_body = True
+                        snake.score += 1
+                        p = pump.clone()
+                        p.random_pos(snake.body, screens.levels_class.current_level_coord)
+                        # add the new pumpking to the list
+                        pump_list_copy.append(p)
+                        # update the score of he difficulty and level in the json file
+                        snake.level_highscore = information['level_highscores'][selected_level][str(snake.difficulty)]
+                        if snake.score > snake.level_highscore:
+                            with open("information.json", "w") as j_file:
+                                information['level_highscores'][selected_level][str(snake.difficulty)] = snake.score
+                                snake.level_highscore = snake.score
+                                json.dump(information, j_file, indent=2)
+                # if the eaten pumpkin has gone through the whole snake, remove from list
+                    if destroy:
+                        # removes specific class instance from list
+                        pump_list_copy.remove(pump)
+                # reset pumpkin list
+                pumpkin_list = pump_list_copy
 
                 # check if the snake collides with itself or border
-                if snake.if_death(blockers):
+                if snake.if_death(screens.levels_class.current_level_rect):
                     snake_alive = False
                     snake.draw_death()
             else:
                 screens.draw_menu()
+                if selected_level != screens.levels_class.selected_level:
+                    #if the user has changed the level, change the random position of the first pump
+                    pumpkin_list[0].random_pos(snake.body, screens.levels_class.current_level_coord)
+                    selected_level = screens.levels_class.selected_level
+                #if the user changed difficulty, set highscore for that difficulty
+                snake.level_highscore = information['level_highscores'][selected_level][str(snake.difficulty)]
+                    
 
             # update the display
             pygame.display.update()
