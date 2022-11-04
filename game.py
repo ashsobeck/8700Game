@@ -10,9 +10,10 @@ from blocker import Blocker
 
 class Game(object):
     __instance = None
-    WIDTH = 960
-    HEIGHT = 640
-    BLOCK_SIZE = 32
+    width = 960
+    height = 640
+    block_size = 32
+    blockers = 10
 
     def __new__(cls, width=960, height=640, block_size=32, blockers=10):
         if Game.__instance is None:
@@ -24,8 +25,8 @@ class Game(object):
         Game.__instance.blockers = blockers
         return Game.__instance
 
-    def make_blockers(self, window):
-        b = Blocker(window, self.width, self.height, self.block_size)
+    def make_blockers(self, window, snake_body):
+        b = Blocker(window, snake_body, self.width, self.height, self.block_size)
         blocker_list = [b.clone() for i in range(self.blockers)]
 
         return blocker_list
@@ -53,7 +54,7 @@ class Game(object):
         screens = Screens(window, snake, information, self.width, self.height, self.block_size)
         running = True
         snake_alive = True
-        blockers = self.make_blockers(window)
+        blockers = self.make_blockers(window, snake.body) 
 
         SCREEN_UPDATE = pygame.USEREVENT
         timer_set = False
@@ -84,7 +85,7 @@ class Game(object):
                             screens.game_start = False
                             snake_alive = True
                             timer_set = False
-                            blockers = self.make_blockers(window)
+                            blockers = self.make_blockers(window, snake.body)
 
             window.blit(screens.background_image, (0, 0))
 
@@ -100,7 +101,7 @@ class Game(object):
                 snake.if_eat_pumpkin()
 
                 # check if the snake collides with itself or border
-                if snake.if_death() or snake.if_hit_blocker(blockers):
+                if snake.if_death(blockers):
                     snake_alive = False
                     snake.draw_death()
             else:

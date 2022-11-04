@@ -212,10 +212,14 @@ class Snake():
 
     # returns true if the head of the snake (rect[0]) collides with any part
     # of the rest of the snake
-    def if_death(self):
+    def if_death(self, blockers):
         front = self.body[0]
         if True in [self.rect[0].colliderect(rect) for rect in self.rect[1:]]:
             print("STOP HITTING YOURSELF")
+            return True
+
+        if True in [self.rect[0].colliderect(rect) for rect in blockers]:
+            print("STOP HITTING THE WALL DUMMY")
             return True
 
         w = int((self.width / self.block_size) - 1)
@@ -240,7 +244,7 @@ class Snake():
             # clone the pumpkin and randomly place it on the map
             if create_new:
                 self.new_body = True
-                self.score += 100
+                self.score += 1
                 p = pump.clone()
                 p.random_pos(self.body)
                 # add the new pumpking to the list

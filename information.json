@@ -1,6 +1,6 @@
 {
   "prev_color": "WHITE",
-  "difficulty": 350,
+  "difficulty": 100,
   "background_image_index": 7,
   "colors": {
     "WHITE": {
@@ -48,7 +48,7 @@
     {
       "350": 10,
       "200": 8,
-      "100": 18
+      "100": 4
     }
   ]
 }
