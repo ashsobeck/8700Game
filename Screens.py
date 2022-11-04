@@ -3,6 +3,7 @@ import pygame
 import numpy as np
 from PIL import Image
 import os
+from Levels import Levels
 from Settings import Settings_Screen
 from Title_Snake import Title_Snake
 from snake import Snake
@@ -33,6 +34,7 @@ class Screens:
         self.medium_button = pygame.image.load("icons/Buttons/Medium.png").convert()
         self.hard_button = pygame.image.load("icons/Buttons/Hard.png").convert()
         self.settings_button = pygame.image.load("icons/Buttons/Settings.png").convert()
+        self.levels_button = pygame.image.load("icons/Buttons/Levels.png").convert()
         self.init_home_buttons()
 
         self.difficulty = self.information['difficulty']
@@ -44,9 +46,11 @@ class Screens:
 
         self.home = True
         self.settings = False
+        self.levels = False
         self.mouse_clicked = False
         self.settings_page = Settings_Screen(self.window, self.information, self.snake_colors, self.snake_colors_list,
                                              self.width, self.height, self.block_size)
+        self.levels_page = Levels(self.window, self.width, self.height, self.block_size, self.information)
         # get the background image from the image list saved in the image_list
         self.background_image = pygame.transform.scale(self.settings_page.image_list[self.information["background_image_index"]][0], (self.width, self.height))
 
@@ -66,18 +70,25 @@ class Screens:
                 self.update_snake_color()
                 self.game_snake.update_snake_color()
                 self.title_snake.update_snake_color()
+        elif self.levels:
+            self.levels_page.draw_levels_screen(self.background_image)
+            self.levels = self.levels_page.get_click()
+            if not self.levels:
+                self.home = True
 
     def draw_home_buttons(self):
         self.easy_button.set_alpha(100)
         self.medium_button.set_alpha(100)
         self.hard_button.set_alpha(100)
         self.settings_button.set_alpha(255)
+        self.levels_button.set_alpha(255)
 
         if self.difficulty == EASY: self.easy_button.set_alpha(255)
         elif self.difficulty == MEDIUM: self.medium_button.set_alpha(255)
         elif self.difficulty == HARD: self.hard_button.set_alpha(255)
 
         self.window.blit(self.start_button, self.start_rect)
+        self.window.blit(self.levels_button, self.levels_rect)
         self.window.blit(self.easy_button, self.easy_rect)
         self.window.blit(self.medium_button, self.medium_rect)
         self.window.blit(self.hard_button, self.hard_rect)
@@ -126,6 +137,14 @@ class Screens:
                 # this is so the mouse won't stay click when we switch to the settings page
                 self.settings_page.mouse_clicked = True
 
+        if self.levels_rect.collidepoint(m_pos):
+            if pygame.mouse.get_pressed()[0] and not self.mouse_clicked:
+                self.levels = True
+                self.home = False
+                self.mouse_clicked = True
+                # this is so the mouse won't stay click when we switch to the levels page
+                self.levels_page.mouse_clicked = True
+
         if pygame.mouse.get_pressed()[0] is False:
             self.mouse_clicked = False
         
@@ -150,6 +169,9 @@ class Screens:
         self.settings_button = pygame.transform.scale(self.settings_button, (self.button_width, self.button_height))
         self.settings_rect = self.settings_button.get_rect()
         self.settings_rect.topleft = (self.width/5, self.height * (1/2))
+
+        self.levels_button = pygame.transform.scale(self.levels_button, (self.button_width, self.button_height))
+        self.levels_rect = self.levels_button.get_rect(topleft=(self.width/5, self.height/2 + self.button_height))
 
     def update_snake_color(self):
         #loop through ever snake png and change the color
