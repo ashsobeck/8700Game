@@ -17,9 +17,12 @@ class Levels:
         self.block_image.set_alpha(200)
         self.back_arrow = pygame.image.load("icons/Left_Arrow.png").convert()
         self.back_arrow.set_alpha(255)
-        self.button = pygame.image.load("icons/Buttons/spooky.jpeg").convert()
-        self.button.set_alpha(255)
         self.back_arrow_rect = self.back_arrow.get_rect(topleft=(2*self.block_size, 2*self.block_size))
+        self.button = pygame.image.load("icons/Buttons/spooky.jpeg").convert()
+        self.button = pygame.transform.scale(self.button, (self.rect_width, self.rect_height))
+        self.button.set_alpha(255)
+        self.random_button_rect = self.button.get_rect(topleft=(self.width/6, self.height/4 - self.rect_height - 20))
+        
 
         #list containing all the levels
         self.levels = []
@@ -28,6 +31,7 @@ class Levels:
        #get the amount of levels and set the first one
         self.level_count = len(self.levels)
         self.selected_level = 0
+        self.random_level = False
 
         #will contain the rectangles for all the levels in levels screen
         self.level_select_rects = []
@@ -46,7 +50,6 @@ class Levels:
     def draw_levels_screen(self, background):
         self.window.blit(background, (0,0))
         self.window.blit(self.back_arrow, self.back_arrow_rect)
-        self.button = pygame.transform.scale(self.button, (self.rect_width, self.rect_height))
         font = pygame.font.SysFont('Arial', 25, bold=True)
         #text_rect = text.get_rect(center=(self.width/2, 5*self.height/6))
         for index, rect in enumerate(self.level_select_rects):
@@ -57,6 +60,14 @@ class Levels:
             text_rect = text.get_rect(center=(rect.centerx, rect.centery))
             self.window.blit(self.button, rect)
             self.window.blit(text, text_rect)
+
+        #random button
+        color = (255,255,255) if self.random_level else (0,0,0)
+        font = pygame.font.SysFont('Arial', 25, bold=True)
+        text = font.render("Random", False, color)
+        text_rect = text.get_rect(center=(self.random_button_rect.centerx, self.random_button_rect.centery))
+        self.window.blit(self.button, self.random_button_rect)
+        self.window.blit(text, text_rect)
 
     def draw_level(self):
         for block_rect in self.current_level_rect:
@@ -73,11 +84,18 @@ class Levels:
                 self.mouse_clicked = True
                 return False
 
+        if self.random_button_rect.collidepoint(m_pos):
+            if pygame.mouse.get_pressed()[0] and not self.mouse_clicked:
+                self.mouse_clicked = True
+                self.random_level = True
+                self.selected_level = -1
+
         level_click = [rect.collidepoint(m_pos) for rect in self.level_select_rects]
         if True in level_click:
             if pygame.mouse.get_pressed()[0] and not self.mouse_clicked:
                 index = level_click.index(True)
                 self.selected_level = index
+                self.random_level = False
                 self.mouse_clicked = True
                 #create a rect for each coordinate in the current selected level
                 self.current_level_rect = [pygame.Rect(l[0] * self.block_size, l[1] * self.block_size, 
@@ -126,7 +144,7 @@ class Levels:
         self.levels.append(level)
 
         # TODO
-        # Level 3
+        # Level 2
         level = []
 
 

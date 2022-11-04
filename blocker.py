@@ -43,3 +43,4 @@ class Blocker():
         x *= self.block_size
         y *= self.block_size
         self.rect = pygame.Rect(x, y, self.block_size, self.block_size)
+        return [x,y]
