@@ -1,6 +1,6 @@
 {
   "prev_color": "WHITE",
-  "difficulty": 100,
+  "difficulty": 350,
   "background_image_index": 7,
   "colors": {
     "WHITE": {
@@ -46,7 +46,7 @@
   },
   "level_highscores": [
     {
-      "350": 0,
+      "350": 10,
       "200": 8,
       "100": 18
     }

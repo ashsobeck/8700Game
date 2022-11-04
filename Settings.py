@@ -2,8 +2,10 @@ from xmlrpc.client import Boolean
 import pygame
 import json
 
+
 class Settings_Screen:
-    def __init__(self, window, json_information: json, snake_colors: dict, snake_color_list: list, width=960, height=640, block_size=32):
+    def __init__(self, window, json_information: json, snake_colors: dict,
+                 snake_color_list: list, width=960, height=640, block_size=32):
 
         self.window = window
         self.width = width
@@ -18,7 +20,8 @@ class Settings_Screen:
         self.image_width = int(self.width/4)
         self.image_height = int(self.image_width/3)
         # will have a list of the images with 4 components
-        # [image surface (image.jpg), scaled down image, image rect (used for mouse click and placement), boolean (is this the background image)]
+        # [image surface (image.jpg), scaled down image, image rect
+        # (used for mouse click and placement), boolean (is this the background image)]
         # is initialized automatically
         self.image_list = []
 
@@ -46,39 +49,38 @@ class Settings_Screen:
                             self.moon_image, self.witch_image, self.scarecrow_image]
         self.init_background_images()
         self.background_image = pygame.transform.scale(self.image_list[self.information["background_image_index"]][0], (self.width, self.height))
-        #set image background to true in the image list
+        # set image background to true in the image list
         self.image_list[self.information["background_image_index"]][3] = True
-
 
     def draw_settings_selection(self):
 
-        #draw back arrow
+        # draw back arrow
         self.window.blit(self.arrow, self.arrow_rect)
-        #draw images
+        # draw images
         for image in self.image_list:
             im = image[1]
             im_rect = image[2]
             is_selected = image[3]
-            im.set_alpha(75) if is_selected == True else im.set_alpha(200)
+            im.set_alpha(75) if is_selected is True else im.set_alpha(200)
             self.window.blit(im, im_rect)
 
-        #draw color on bottom
+        # draw color on bottom
         # get new color hex and convert to rgb
         color = self.snake_colors[self.current_snake_color]
         color_hex = color['hex']
         color_val = tuple(int(color_hex[i:i+2], 16) for i in (0, 2, 4))
-        
+
         my_font = pygame.font.SysFont('Comic Sans MS', int(self.width/20), bold=True)
         text = my_font.render(color["color"], False, color_val)
         text_rect = text.get_rect(center=(self.width/2, 5*self.height/6))
 
-        #place color arrows coordinates
+        # place color arrows coordinates
         self.left_arrow_rect = self.color_left_arrow.get_rect(center=(2*self.width/7, 5*self.height/6))
         self.right_arrow_rect = self.color_right_arrow.get_rect(center=(5*self.width/7, 5*self.height/6))
         self.color_left_arrow.set_alpha(200)
         self.color_right_arrow.set_alpha(200)
 
-        #place labels coordinates
+        # place labels coordinates
         background_rect = self.background_button.get_rect(center=(self.width/2, self.arrow_rect.centery))
         snake_color_rect = self.snake_color_button.get_rect(center=(self.width/2, text_rect.centery - 50))
 
@@ -88,7 +90,7 @@ class Settings_Screen:
         self.window.blit(self.color_left_arrow, self.left_arrow_rect)
         self.window.blit(self.color_right_arrow, self.right_arrow_rect)
 
-    #check if a button was clicked in the settings page
+    # check if a button was clicked in the settings page
     # returns two booleans, the first one is if we go back to home page
     # second boolean is if we should update snake color
     def get_click_settings(self):
@@ -98,9 +100,10 @@ class Settings_Screen:
             rect = image[2]
             if rect.collidepoint(m_pos):
                 if pygame.mouse.get_pressed()[0] and not self.mouse_clicked:
-                    #set all the images to false showing
-                    for im in self.image_list: im[3] = False 
-                    #make current image true
+                    # set all the images to false showing
+                    for im in self.image_list: 
+                        im[3] = False
+                    # make current image true
                     self.image_list[index][3] = True
                     self.background_image = pygame.transform.scale(image[0], (self.width, self.height))
                     with open("information.json", "w") as j_file:
@@ -145,11 +148,10 @@ class Settings_Screen:
                     self.information['prev_color'] = self.current_snake_color
                     json.dump(self.information, j_file, indent=2)
                 return False, True
-                
-        
+
         if not pygame.mouse.get_pressed()[0]:
             self.mouse_clicked = False
-        
+
         return False, False
 
     def init_background_images(self):
