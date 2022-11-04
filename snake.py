@@ -1,6 +1,7 @@
 import pygame
 import json
 from pumpkin import Pumpkin
+from blocker import Blocker
 
 EASY = 350
 MEDIUM = 200
@@ -66,7 +67,7 @@ class Snake():
         # Used in collision detection
         self.rect = [pygame.Rect(part[0] * self.block_size, part[1] * self.block_size, self.block_size, self.block_size) for part in self.body]
         self.new_body = False
-        
+
     def draw_snake(self):
         self.update_head()
         self.update_tail()
@@ -112,10 +113,14 @@ class Snake():
 
     def draw_score(self):
         level_highscore = self.information["level_highscores"][self.current_level - 1][str(self.difficulty)]
-        if self.difficulty == EASY: dif = "Easy"
-        elif self.difficulty == MEDIUM: dif = "Medium"
-        elif self.difficulty == HARD: dif = "Hard"
-        text_string = "Current Score (Level High Score): " + dif + " " + str(self.score) + "(" + str(level_highscore) + ")"
+        if self.difficulty == EASY:
+            dif = "Easy"
+        elif self.difficulty == MEDIUM:
+            dif = "Medium"
+        elif self.difficulty == HARD:
+            dif = "Hard"
+        text_string = "Current Score (Level High Score): " + dif + " " \
+                      + str(self.score) + "(" + str(level_highscore) + ")"
         my_font = pygame.font.SysFont('Comic Sans MS', 30, bold=True)
         text = my_font.render(text_string, False, (255, 255, 255))
         text_rect = text.get_rect(topleft=(0,0))
@@ -205,7 +210,8 @@ class Snake():
             final_position.append(a - b)
         return final_position
 
-    # returns true if the head of the snake (rect[0]) collides with any part of the rest of the snake
+    # returns true if the head of the snake (rect[0]) collides with any part
+    # of the rest of the snake
     def if_death(self):
         front = self.body[0]
         if True in [self.rect[0].colliderect(rect) for rect in self.rect[1:]]:
@@ -220,7 +226,7 @@ class Snake():
                 front[1] - 1 != h and self.direction == 'down')):
             print("DEAD I SAY. U DEAD")
             return True
-        
+
         return False
 
     def if_eat_pumpkin(self):
@@ -234,7 +240,7 @@ class Snake():
             # clone the pumpkin and randomly place it on the map
             if create_new:
                 self.new_body = True
-                self.score += 1
+                self.score += 100
                 p = pump.clone()
                 p.random_pos(self.body)
                 # add the new pumpking to the list
@@ -251,6 +257,13 @@ class Snake():
                 pump_list_copy.remove(pump)
         # reset pumpkin list
         self.pumpkin_list = pump_list_copy
+
+    def if_hit_blocker(self, blockers: list[Blocker]):
+        for block in blockers:
+            hit = block.if_collision(self.rect)
+            if hit:
+                return True
+        return False
 
     # since the image png's have been update, we need to update each self
     # variable with the new image

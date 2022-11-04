@@ -22,7 +22,7 @@ class Pumpkin():
         self.destroy = False
 
         # create a random position for the pumpkin
-        self.position = self.random_pos()
+        # self.position = self.random_pos()
 
     def draw(self):
         self.window.blit(self.image, self.rect)

@@ -7,9 +7,11 @@ from Settings import Settings_Screen
 from Title_Snake import Title_Snake
 from snake import Snake
 
-EASY=350
-MEDIUM=200
-HARD=100
+EASY = 350
+MEDIUM = 200
+HARD = 100
+
+
 class Screens:
     def __init__(self, window, game_snake: Snake, information: json, width=960, height=640, block_size=32):
         self.window = window
@@ -19,7 +21,7 @@ class Screens:
         self.game_start = False
         self.information = information
 
-        #create dummy snake. This is so we can use the images for our background
+        # create dummy snake. This is so we can use the images for our background
         self.title_snake = Title_Snake(self.window, self.width, self.height, self.block_size * 2)
         self.game_snake = game_snake
 
@@ -32,7 +34,7 @@ class Screens:
         self.hard_button = pygame.image.load("icons/Buttons/Hard.png").convert()
         self.settings_button = pygame.image.load("icons/Buttons/Settings.png").convert()
         self.init_home_buttons()
-     
+
         self.difficulty = self.information['difficulty']
         self.game_snake.update_difficulty(self.difficulty)
 
@@ -45,9 +47,9 @@ class Screens:
         self.mouse_clicked = False
         self.settings_page = Settings_Screen(self.window, self.information, self.snake_colors, self.snake_colors_list,
                                              self.width, self.height, self.block_size)
-        #get the background image from the image list saved in the image_list
+        # get the background image from the image list saved in the image_list
         self.background_image = pygame.transform.scale(self.settings_page.image_list[self.information["background_image_index"]][0], (self.width, self.height))
-    
+
     def draw_menu(self):
         self.title_snake.draw_snake()
         if self.home:
@@ -65,7 +67,6 @@ class Screens:
                 self.game_snake.update_snake_color()
                 self.title_snake.update_snake_color()
 
-
     def draw_home_buttons(self):
         self.easy_button.set_alpha(100)
         self.medium_button.set_alpha(100)
@@ -81,7 +82,6 @@ class Screens:
         self.window.blit(self.medium_button, self.medium_rect)
         self.window.blit(self.hard_button, self.hard_rect)
         self.window.blit(self.settings_button, self.settings_rect)
-
 
     def get_click_home(self):
         m_pos = pygame.mouse.get_pos()
