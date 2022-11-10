@@ -4,6 +4,7 @@ from Screens import Screens
 from pumpkin import Pumpkin
 from snake import Snake
 from blocker import Blocker
+from blocker_structures import *
 
 # Init pygame
 
@@ -15,6 +16,7 @@ class Game(object):
     block_size = 32
     blockers = 10
 
+    # this makes our singleton
     def __new__(cls, width=960, height=640, block_size=32, blockers=10):
         if Game.__instance is None:
             print('Game Initializing...')
@@ -27,7 +29,8 @@ class Game(object):
 
     def make_blockers(self, window, snake_body):
         b = Blocker(window, snake_body, self.width, self.height, self.block_size)
-        blocker_list = [b.clone() for i in range(self.blockers)]
+        # blocker_list = [b.clone() for i in range(self.blockers)]
+        blocker_list = make_col(rand, y, len, block)
 
         return blocker_list
 

@@ -3,7 +3,8 @@ import random
 
 
 class Blocker():
-    def __init__(self, window, snake_body: list[list[int, int]], width=960, height=640, block_size=32):
+    def __init__(self, window, snake_body: list[list[int, int]], width=960,
+                 height=640, block_size=32, position=[-1, -1]):
         # make blocker opaque
         self.image = pygame.image.load("icons/blocker.png").convert()
         self.image.set_alpha(255)
@@ -16,12 +17,17 @@ class Blocker():
 
         self.hit = False
         self.position = self.random_pos(self.snake_body)
+        if -1 not in position:
+            self.position = self.get_pos(position)
 
     def draw(self):
         self.window.blit(self.image, self.rect)
 
-    def clone(self):
+    def clone(self, x=-1, y=-1):
         # make a clone
+        if x != -1 and y != -1:
+            return Blocker(self.window, self.snake_body, self.width,
+                           self.height, self.block_size, (x, y))
         block = Blocker(self.window, self.snake_body, self.width, self.height, self.block_size)
         return block
 
@@ -30,6 +36,14 @@ class Blocker():
             self.hit = True
             print('NOPE YOU DED')
         return self.hit
+
+    def get_pos(self, position: tuple(int, int)):
+        x, y = position
+        x *= self.block_size
+        y *= self.block_size
+
+        self.rect = pygame.Rect(x, y, self.block_size, self.block_size)
+        return [x, y]
 
     # snake body should be coordinates of the snake
     def random_pos(self, snake_body: list[list[int, int]]):
@@ -43,4 +57,4 @@ class Blocker():
         x *= self.block_size
         y *= self.block_size
         self.rect = pygame.Rect(x, y, self.block_size, self.block_size)
-        return [x,y]
+        return [x, y]
