@@ -125,7 +125,7 @@ class Levels:
 
 
     def init_levels(self):
-        
+    
         #Level 0. Empty with no walls
         self.levels.append([])
 
@@ -133,8 +133,8 @@ class Levels:
         level = []
         start_col = int(self.cells_x/10)
         end_col = int(9*self.cells_x/10)
-        height_1 = 3
-        height_2 = 16
+        height_1 = int(self.cells_y/10) + 1
+        height_2 = int(4*self.cells_y/5)
         for x in range(start_col, end_col):
             level.append([x, height_1])
         for x in range(start_col, end_col):
@@ -144,8 +144,8 @@ class Levels:
         # Level 2
         # 4 L blocks
         level = []
-        height_1 = 3
-        height_2 = 16
+        height_1 = int(self.cells_y/10) + 1
+        height_2 = int(4*self.cells_y/5)
         #top left
         start_col = int(self.cells_x/10)
         end_col = int(4*self.cells_x/10)
@@ -180,14 +180,13 @@ class Levels:
 
         self.levels.append(level)
 
-        # TODO
         # Level 3
         # 3 horizontal lines
         level = []
         start_col = int(self.cells_x/10)
         end_col = int(9*self.cells_x/10)
-        height_1 = 3
-        height_2 = 16
+        height_1 = int(self.cells_y/10) + 1
+        height_2 = int(4*self.cells_y/5)
         height_3 = int(self.cells_y/2)
 
         for x in range(start_col, end_col):
@@ -199,15 +198,13 @@ class Levels:
 
         self.levels.append(level)
 
-        # TODO
         # Level 4
         # 2 vertical lines
-
         level = []
         col_1 = int(2*self.cells_x/10)
         col_2 = int(8*self.cells_x/10)
-        height_1 = 3
-        height_2 = 17
+        height_1 = int(self.cells_y/10) + 1
+        height_2 = int(4*self.cells_y/5)
 
         for x in range(height_1, height_2):
             level.append([col_1, x])
@@ -215,6 +212,31 @@ class Levels:
             level.append([col_2, x])
 
         self.levels.append(level)
+
+        # Level 5
+        # open box
+        level = []
+        start_col = int(self.cells_x/10)
+        end_col = int(9*self.cells_x/10)
+        height_1 = int(self.cells_y/10) + 1
+        height_2 = int(4*self.cells_y/5)
+
+        for x in range(start_col, end_col):
+            level.append([x, height_1])
+        for x in range(start_col, end_col):
+            level.append([x, height_2])
+        for x in range(height_1 + 1, height_2):
+            if x not in [self.cells_y/2, self.cells_y/2 - 1]:
+                level.append([start_col, x])
+        for x in range(height_1 + 1, height_2):
+            if x not in [self.cells_y/2, self.cells_y/2 - 1]:
+                level.append([end_col - 1, x])
+
+        self.levels.append(level)
+
+
+
+
 
 
 
