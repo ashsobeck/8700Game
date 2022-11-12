@@ -59,7 +59,7 @@ class Snake():
         self.next_direction = 'right'
         # the body keeps track of the positon of each body part
         # for simplicity we will keep track of what cell its in
-        self.body = [[15, 10], [14, 10], [13, 10], [12, 10], [11, 10], [10, 10], [9, 10]]
+        self.body = [[15, 9], [14, 9], [13, 9], [12, 9], [11, 9], [10, 9], [9, 9]]
         # this will hold the rectangles of each block.
         # Used in collision detection
         self.rect = [pygame.Rect(part[0] * self.block_size, part[1] * self.block_size, self.block_size, self.block_size) for part in self.body]

@@ -133,8 +133,8 @@ class Levels:
         level = []
         start_col = int(self.cells_x/10)
         end_col = int(9*self.cells_x/10)
-        height_1 = int(self.cells_y/6)
-        height_2 = height_1 * 5
+        height_1 = 3
+        height_2 = 16
         for x in range(start_col, end_col):
             level.append([x, height_1])
         for x in range(start_col, end_col):
@@ -142,7 +142,10 @@ class Levels:
         self.levels.append(level)
 
         # Level 2
+        # 4 L blocks
         level = []
+        height_1 = 3
+        height_2 = 16
         #top left
         start_col = int(self.cells_x/10)
         end_col = int(4*self.cells_x/10)
@@ -179,7 +182,27 @@ class Levels:
 
         # TODO
         # Level 3
+        # 3 horizontal lines
         level = []
+        start_col = int(self.cells_x/10)
+        end_col = int(9*self.cells_x/10)
+        height_1 = 3
+        height_2 = 16
+        height_3 = int(self.cells_y/2)
+
+        for x in range(start_col, end_col):
+            level.append([x, height_1])
+        for x in range(start_col, end_col):
+            level.append([x, height_2])
+        for x in range(start_col, end_col):
+            level.append([x, height_3])
+
+        self.levels.append(level)
+
+        # TODO
+        # Level 4
+
+
 
 
         
