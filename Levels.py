@@ -234,6 +234,22 @@ class Levels:
 
         self.levels.append(level)
 
+        # Level 6
+        # T
+        level = []
+        start_col = int(self.cells_x/10)
+        end_col = int(9*self.cells_x/10)
+        middle_col = int(self.cells_x/2) - 1
+        height_1 = int(self.cells_y/10) + 1
+        height_2 = int(4*self.cells_y/5)
+
+        for x in range(start_col, end_col):
+            level.append([x, height_1])
+        for x in range(height_1 + 1, height_2):
+            level.append([middle_col, x])
+
+        self.levels.append(level)
+
 
 
 
