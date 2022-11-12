@@ -201,6 +201,21 @@ class Levels:
 
         # TODO
         # Level 4
+        # 2 vertical lines
+
+        level = []
+        col_1 = int(2*self.cells_x/10)
+        col_2 = int(8*self.cells_x/10)
+        height_1 = 3
+        height_2 = 17
+
+        for x in range(height_1, height_2):
+            level.append([col_1, x])
+        for x in range(height_1, height_2):
+            level.append([col_2, x])
+
+        self.levels.append(level)
+
 
 
 
