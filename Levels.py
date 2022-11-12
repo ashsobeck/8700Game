@@ -129,22 +129,56 @@ class Levels:
         #Level 0. Empty with no walls
         self.levels.append([])
 
-        #Level 1. 2 Horizontal lines
+        #Level 1
         level = []
         start_col = int(self.cells_x/10)
         end_col = int(9*self.cells_x/10)
         height_1 = int(self.cells_y/6)
         height_2 = height_1 * 5
-        top_line = [x for x in range(start_col, end_col)]
-        for l in top_line:
-            level.append([l, height_1])
-        bottom_line = [x for x in range(start_col, end_col)]
-        for l in bottom_line:
-            level.append([l, height_2])
+        for x in range(start_col, end_col):
+            level.append([x, height_1])
+        for x in range(start_col, end_col):
+            level.append([x, height_2])
+        self.levels.append(level)
+
+        # Level 2
+        level = []
+        #top left
+        start_col = int(self.cells_x/10)
+        end_col = int(4*self.cells_x/10)
+        for x in range(start_col, end_col):
+            level.append([x, height_1])
+        level.append([start_col, height_1 + 1])
+        level.append([start_col, height_1 + 2])
+
+        #top right
+        start_col = int(6*self.cells_x/10)
+        end_col = int(9*self.cells_x/10)
+        for x in range(start_col, end_col):
+            level.append([x, height_1])
+        level.append([end_col - 1, height_1 + 1])
+        level.append([end_col - 1, height_1 + 2])
+
+        #bottom left
+        start_col = int(self.cells_x/10)
+        end_col = int(4*self.cells_x/10)
+        for x in range(start_col, end_col):
+            level.append([x, height_2])
+        level.append([start_col, height_2 - 1])
+        level.append([start_col, height_2 - 2])
+
+        #bottom right
+        start_col = int(6*self.cells_x/10)
+        end_col = int(9*self.cells_x/10)
+        for x in range(start_col, end_col):
+            level.append([x, height_2])
+        level.append([end_col - 1, height_2 - 1])
+        level.append([end_col - 1, height_2 - 2])
+
         self.levels.append(level)
 
         # TODO
-        # Level 2
+        # Level 3
         level = []
 
 
