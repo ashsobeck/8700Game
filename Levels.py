@@ -314,7 +314,7 @@ class Levels:
         height_1 = int(self.cells_y/10) + 1
         height_2 = int(4*self.cells_y/5)
         
-        # 2 horizontal lines
+        # 2 horizontal lines with a hole
         for x in range(start_col, end_col):
             if x not in [self.cells_x/2, self.cells_x/2 - 1]:
                 level.append([x, height_1])
@@ -332,6 +332,47 @@ class Levels:
             if x not in [self.cells_y/2, self.cells_y/2 - 1]:
                 level.append([end_col - 1, x])
 
+        self.levels.append(level)
+
+        # Level 11
+        # square with an 1 enter and exit hole
+        level = []
+        
+        # 2 horizontal lines
+        for x in range(start_col, end_col):
+            level.append([x, height_1])
+        for x in range(start_col, end_col):
+            level.append([x, height_2])
+        
+        # 2 vertical lines with hole
+        for x in range(height_1 + 1, height_2):
+            #if not in the middle
+            if x not in [self.cells_y/2, self.cells_y/2 - 1]:
+                level.append([start_col, x])
+        for x in range(height_1 + 1, height_2):
+            #if not in the middle
+            if x not in [self.cells_y/2, self.cells_y/2 - 1]:
+                level.append([end_col - 1, x])
+
+        self.levels.append(level)
+
+        # Level 12
+        # square with a enter and exit hole
+        level = []
+        
+        # 2 horizontal lines
+        for x in range(start_col, end_col):
+            level.append([x, height_1])
+        for x in range(start_col, end_col):
+            level.append([x, height_2])
+        
+        # 2 vertical lines with hole
+        for x in range(height_1 + 1, height_2):
+            level.append([start_col, x])
+        for x in range(height_1 + 1, height_2):
+            # single hole
+            if x not in [self.cells_y/2, self.cells_y/2 - 1]:
+                level.append([end_col - 1, x])
 
         self.levels.append(level)
 
