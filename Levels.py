@@ -307,7 +307,7 @@ class Levels:
         self.levels.append(level)
 
         # Level 10
-        # square with an enter and exit hole
+        # square with an 2 enter and 2 exit holes
         level = []
         start_col = int(self.cells_x/10)
         end_col = int(9*self.cells_x/10)
@@ -316,9 +316,11 @@ class Levels:
         
         # 2 horizontal lines
         for x in range(start_col, end_col):
-            level.append([x, height_1])
+            if x not in [self.cells_x/2, self.cells_x/2 - 1]:
+                level.append([x, height_1])
         for x in range(start_col, end_col):
-            level.append([x, height_2])
+            if x not in [self.cells_x/2, self.cells_x/2 - 1]:
+                level.append([x, height_2])
         
         # 2 vertical lines with hole
         for x in range(height_1 + 1, height_2):
