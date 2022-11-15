@@ -8,8 +8,8 @@ class Levels:
         self.width = width
         self.height = height
         self.block_size = block_size
-        self.cells_x = self.width/self.block_size
-        self.cells_y = self.height/self.block_size
+        self.cells_x = int(self.width/self.block_size)
+        self.cells_y = int(self.height/self.block_size)
         self.rect_width = int(self.block_size * 4)
         self.rect_height = int(self.block_size * 2)
 
@@ -373,6 +373,57 @@ class Levels:
             # single hole
             if x not in [self.cells_y/2, self.cells_y/2 - 1]:
                 level.append([end_col - 1, x])
+
+        self.levels.append(level)
+
+        # Level 13 
+        # Corner Covers
+        level = []
+        start_col = int(self.cells_x/6) 
+        end_col = int(5*self.cells_x/6)
+        height_1 = int(self.cells_y/4)
+        height_2 = int(3*self.cells_y/4)
+
+        # top left
+        # vertical
+        for x in range(0, height_1 + 1):
+            if x != int(self.cells_y/10):
+                level.append([start_col, x])
+        # horizontal
+        for x in range(0, start_col):
+            if x != int(self.cells_x/15):
+                level.append([x, height_1])
+
+        # top right
+        # vertical
+        for x in range(0, height_1):
+            if x != int(self.cells_y/10):
+                level.append([end_col - 1, x])
+        # horizontal
+        for x in range(end_col - 1, self.cells_x):
+            if x != int(13*self.cells_x/15 + 1):
+                level.append([x, height_1])
+
+        
+        # bottom right
+        # vertical
+        for x in range(height_2 - 1, self.cells_y):
+            if x != int(8*self.cells_y/10 + 1):
+                level.append([end_col - 1, x])
+        # horizontal
+        for x in range(end_col, self.cells_x):
+            if x != int(13*self.cells_x/15 + 1):
+                level.append([x, height_2 - 1])
+
+        # bottom left
+        # vertical
+        for x in range(height_2 - 1, self.cells_y):
+            if x != int(8*self.cells_y/10 + 1):
+                level.append([start_col, x])
+        # horizontal
+        for x in range(0, start_col):
+            if x != int(self.cells_x/15):
+                level.append([x, height_2 - 1])
 
         self.levels.append(level)
 
