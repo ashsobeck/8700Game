@@ -429,9 +429,7 @@ class Levels:
 
         # Level 14
         # Corners with square with 2 hole
-        # The nexts levels will reuse the corners therefore we can make a copy to keep
-        corners = level
-
+        
         # Yes, I can just make it 7 however to match the rest it needs to be scalable
         start_col = int(7*self.cells_x/30)
         end_col = int(22*self.cells_x/30)
@@ -440,23 +438,42 @@ class Levels:
         
         # 2 horizontal lines with a hole
         for x in range(start_col, end_col):
-            if x not in [self.cells_x/2, self.cells_x/2 - 1]:
+            if x not in [self.cells_x/2, self.cells_x/2 - 1, self.cells_x/2 - 2]:
                 level.append([x, height_1])
         for x in range(start_col, end_col):
-            if x not in [self.cells_x/2, self.cells_x/2 - 1]:
+            if x not in [self.cells_x/2, self.cells_x/2 - 1, self.cells_x/2 - 2]:
                 level.append([x, height_2])
         
         # 2 vertical lines with hole
         for x in range(height_1 + 1, height_2):
             #if not in the middle
-            if x not in [self.cells_y/2, self.cells_y/2 - 1, self.cells_y/2 - 2]:
+            if x not in [self.cells_y/2, self.cells_y/2 - 1]:
                 level.append([start_col, x])
         for x in range(height_1 + 1, height_2):
             #if not in the middle
-            if x not in [self.cells_y/2, self.cells_y/2 - 1, self.cells_y/2 - 2]:
+            if x not in [self.cells_y/2, self.cells_y/2 - 1]:
                 level.append([end_col - 1, x])
 
         self.levels.append(level)
+
+        # Level 15 
+        # Corners with a square with 2 holes
+        # this is the same as the last level with added difficulty
+        # for this round all we have to do is add 1 block in the vertical
+        # and horizontal lines
+
+        # horizontal
+        level.append([self.cells_x/2, height_1])
+        level.append([self.cells_x/2 - 2, height_1])
+        level.append([self.cells_x/2, height_2])
+        level.append([self.cells_x/2 - 2, height_2])
+
+        # vertical 
+        level.append([start_col, self.cells_y/2])
+        level.append([end_col - 1, self.cells_y/2])
+
+        self.levels.append(level)
+
 
 
 
