@@ -8,8 +8,8 @@ class Levels:
         self.width = width
         self.height = height
         self.block_size = block_size
-        self.cells_x = self.width/self.block_size
-        self.cells_y = self.height/self.block_size
+        self.cells_x = int(self.width/self.block_size)
+        self.cells_y = int(self.height/self.block_size)
         self.rect_width = int(self.block_size * 4)
         self.rect_height = int(self.block_size * 2)
 
@@ -125,27 +125,327 @@ class Levels:
 
 
     def init_levels(self):
-        
+    
         #Level 0. Empty with no walls
         self.levels.append([])
 
-        #Level 1. 2 Horizontal lines
+        #Level 1
+        # 2 horizontal lines
         level = []
         start_col = int(self.cells_x/10)
         end_col = int(9*self.cells_x/10)
-        height_1 = int(self.cells_y/6)
-        height_2 = height_1 * 5
-        top_line = [x for x in range(start_col, end_col)]
-        for l in top_line:
-            level.append([l, height_1])
-        bottom_line = [x for x in range(start_col, end_col)]
-        for l in bottom_line:
-            level.append([l, height_2])
+        height_1 = int(self.cells_y/10) + 1
+        height_2 = int(4*self.cells_y/5)
+        for x in range(start_col, end_col):
+            level.append([x, height_1])
+        for x in range(start_col, end_col):
+            level.append([x, height_2])
         self.levels.append(level)
 
-        # TODO
         # Level 2
+        # 4 L blocks
         level = []
+        height_1 = int(self.cells_y/10) + 1
+        height_2 = int(4*self.cells_y/5)
+        #top left
+        start_col = int(self.cells_x/10)
+        end_col = int(4*self.cells_x/10)
+        for x in range(start_col, end_col):
+            level.append([x, height_1])
+        level.append([start_col, height_1 + 1])
+        level.append([start_col, height_1 + 2])
+
+        #top right
+        start_col = int(6*self.cells_x/10)
+        end_col = int(9*self.cells_x/10)
+        for x in range(start_col, end_col):
+            level.append([x, height_1])
+        level.append([end_col - 1, height_1 + 1])
+        level.append([end_col - 1, height_1 + 2])
+
+        #bottom left
+        start_col = int(self.cells_x/10)
+        end_col = int(4*self.cells_x/10)
+        for x in range(start_col, end_col):
+            level.append([x, height_2])
+        level.append([start_col, height_2 - 1])
+        level.append([start_col, height_2 - 2])
+
+        #bottom right
+        start_col = int(6*self.cells_x/10)
+        end_col = int(9*self.cells_x/10)
+        for x in range(start_col, end_col):
+            level.append([x, height_2])
+        level.append([end_col - 1, height_2 - 1])
+        level.append([end_col - 1, height_2 - 2])
+
+        self.levels.append(level)
+
+        # Level 3
+        # 3 horizontal lines
+        level = []
+        start_col = int(self.cells_x/10)
+        end_col = int(9*self.cells_x/10)
+        height_1 = int(self.cells_y/10) + 1
+        height_2 = int(4*self.cells_y/5)
+        height_3 = int(self.cells_y/2)
+
+        for x in range(start_col, end_col):
+            level.append([x, height_1])
+        for x in range(start_col, end_col):
+            level.append([x, height_2])
+        for x in range(start_col, end_col):
+            level.append([x, height_3])
+
+        self.levels.append(level)
+
+        # Level 4
+        # 2 vertical lines
+        level = []
+        col_1 = int(2*self.cells_x/10)
+        col_2 = int(8*self.cells_x/10)
+        height_1 = int(self.cells_y/10) + 1
+        height_2 = int(4*self.cells_y/5)
+
+        for x in range(height_1, height_2):
+            level.append([col_1, x])
+        for x in range(height_1, height_2):
+            level.append([col_2, x])
+
+        self.levels.append(level)
+
+        # Level 5
+        # open box
+        level = []
+        start_col = int(self.cells_x/10)
+        end_col = int(9*self.cells_x/10)
+        height_1 = int(self.cells_y/10) + 1
+        height_2 = int(4*self.cells_y/5)
+
+        for x in range(start_col, end_col):
+            level.append([x, height_1])
+        for x in range(start_col, end_col):
+            level.append([x, height_2])
+        for x in range(height_1 + 1, height_2):
+            if x not in [self.cells_y/2, self.cells_y/2 - 1]:
+                level.append([start_col, x])
+        for x in range(height_1 + 1, height_2):
+            if x not in [self.cells_y/2, self.cells_y/2 - 1]:
+                level.append([end_col - 1, x])
+
+        self.levels.append(level)
+
+        # Level 6
+        # T with a hole
+        level = []
+        start_col = int(self.cells_x/10)
+        end_col = int(9*self.cells_x/10)
+        middle_col = int(self.cells_x/2) - 1
+        height_1 = int(self.cells_y/10) + 1
+        height_2 = int(4*self.cells_y/5)
+
+        for x in range(start_col, end_col):
+            level.append([x, height_1])
+        for x in range(height_1 + 1, height_2):
+            if x not in [self.cells_y/2, self.cells_y/2 - 1]:
+                level.append([middle_col, x])
+
+        self.levels.append(level)
+
+        # Level 7
+        # T without a hole
+        # add filling
+        # make a copy to not break level 6
+        level = level.copy()
+        level.append([middle_col, self.cells_y/2])
+        level.append([middle_col, self.cells_y/2 - 1])
+
+        self.levels.append(level)
+
+        # Level 8
+        # Sideways H with a hole
+        level = []
+        start_col = int(self.cells_x/10)
+        end_col = int(9*self.cells_x/10)
+        middle_col = int(self.cells_x/2) - 1
+        height_1 = int(self.cells_y/10) + 1
+        height_2 = int(4*self.cells_y/5)
+
+        for x in range(start_col, end_col):
+            level.append([x, height_1])
+        for x in range(start_col, end_col):
+            level.append([x, height_2])
+        for x in range(height_1 + 1, height_2):
+            #if not in the middle
+            if x not in [self.cells_y/2, self.cells_y/2 - 1]:
+                level.append([middle_col, x])
+
+        self.levels.append(level)
+
+        # Level 9
+        # Sideways H without a hole
+        # add filling
+        level = level.copy()
+        level.append([middle_col, self.cells_y/2])
+        level.append([middle_col, self.cells_y/2 - 1])
+        self.levels.append(level)
+
+        # Level 10
+        # square with an 2 enter and 2 exit holes
+        level = []
+        start_col = int(self.cells_x/10)
+        end_col = int(9*self.cells_x/10)
+        height_1 = int(self.cells_y/10) + 1
+        height_2 = int(4*self.cells_y/5)
+        
+        # 2 horizontal lines with a hole
+        for x in range(start_col, end_col):
+            if x not in [self.cells_x/2, self.cells_x/2 - 1]:
+                level.append([x, height_1])
+        for x in range(start_col, end_col):
+            if x not in [self.cells_x/2, self.cells_x/2 - 1]:
+                level.append([x, height_2])
+        
+        # 2 vertical lines with hole
+        for x in range(height_1 + 1, height_2):
+            #if not in the middle
+            if x not in [self.cells_y/2, self.cells_y/2 - 1]:
+                level.append([start_col, x])
+        for x in range(height_1 + 1, height_2):
+            #if not in the middle
+            if x not in [self.cells_y/2, self.cells_y/2 - 1]:
+                level.append([end_col - 1, x])
+
+        self.levels.append(level)
+
+        # Level 11
+        # square with an 1 enter and exit hole
+        # add filling
+        level = level.copy()
+        level.append([self.cells_x/2, height_1])
+        level.append([self.cells_x/2 - 1, height_1])
+        level.append([self.cells_x/2, height_2])
+        level.append([self.cells_x/2 - 1, height_2])
+
+        self.levels.append(level)
+
+        # Level 12
+        # square with 1 enter hole
+        # add filling to left
+        level = level.copy()
+        level.append([start_col, self.cells_y/2])
+        level.append([start_col, self.cells_y/2 - 1])
+        self.levels.append(level)
+
+
+        # Level 13 
+        # Corner Covers
+        level = []
+        start_col = int(self.cells_x/6) 
+        end_col = int(5*self.cells_x/6)
+        height_1 = int(self.cells_y/4)
+        height_2 = int(3*self.cells_y/4)
+
+        # top left
+        # vertical
+        for x in range(0, height_1 + 1):
+            if x != int(self.cells_y/10):
+                level.append([start_col, x])
+        # horizontal
+        for x in range(0, start_col):
+            if x != int(self.cells_x/15):
+                level.append([x, height_1])
+
+        # top right
+        # vertical
+        for x in range(0, height_1):
+            if x != int(self.cells_y/10):
+                level.append([end_col - 1, x])
+        # horizontal
+        for x in range(end_col - 1, self.cells_x):
+            if x != int(13*self.cells_x/15 + 1):
+                level.append([x, height_1])
+
+        # bottom right
+        # vertical
+        for x in range(height_2 - 1, self.cells_y):
+            if x != int(8*self.cells_y/10 + 1):
+                level.append([end_col - 1, x])
+        # horizontal
+        for x in range(end_col, self.cells_x):
+            if x != int(13*self.cells_x/15 + 1):
+                level.append([x, height_2 - 1])
+
+        # bottom left
+        # vertical
+        for x in range(height_2 - 1, self.cells_y):
+            if x != int(8*self.cells_y/10 + 1):
+                level.append([start_col, x])
+        # horizontal
+        for x in range(0, start_col):
+            if x != int(self.cells_x/15):
+                level.append([x, height_2 - 1])
+
+        self.levels.append(level)
+
+        # Level 14
+        # Corners with square with 2 hole
+        # reuse previous level
+        # Yes, I can just make it 7 however to match the rest it needs to be scalable
+        level = level.copy()
+        start_col = int(7*self.cells_x/30)
+        end_col = int(22*self.cells_x/30)
+        height_1 = int(7*self.cells_y/20)
+        height_2 = int(12*self.cells_y/20)
+        
+        # 2 horizontal lines with a hole
+        for x in range(start_col, end_col):
+            if x not in [self.cells_x/2, self.cells_x/2 - 1, self.cells_x/2 - 2]:
+                level.append([x, height_1])
+        for x in range(start_col, end_col):
+            if x not in [self.cells_x/2, self.cells_x/2 - 1, self.cells_x/2 - 2]:
+                level.append([x, height_2])
+        
+        # 2 vertical lines with hole
+        for x in range(height_1 + 1, height_2):
+            #if not in the middle
+            if x not in [self.cells_y/2, self.cells_y/2 - 1]:
+                level.append([start_col, x])
+        for x in range(height_1 + 1, height_2):
+            #if not in the middle
+            if x not in [self.cells_y/2, self.cells_y/2 - 1]:
+                level.append([end_col - 1, x])
+
+        self.levels.append(level)
+
+        # Level 15 
+        # Corners with a square with 2 holes
+        # this is the same as the last level with added difficulty
+        # for this round all we have to do is add 1 block in the vertical
+        # and horizontal lines
+        level = level.copy()
+
+        # horizontal
+        level.append([self.cells_x/2, height_1])
+        level.append([self.cells_x/2 - 2, height_1])
+        level.append([self.cells_x/2, height_2])
+        level.append([self.cells_x/2 - 2, height_2])
+
+        # vertical 
+        level.append([start_col, self.cells_y/2])
+        level.append([end_col - 1, self.cells_y/2])
+
+        self.levels.append(level)
+
+
+
+
+
+
+
+
+
+
 
 
         

@@ -40,7 +40,6 @@ class Game(object):
 
         return coord_list
 
-
     def run(self):
         pygame.init()
         pygame.font.init()
@@ -70,7 +69,7 @@ class Game(object):
         pumpkin_list[0].random_pos(snake.body, screens.levels_class.current_level_coord)
         selected_level = screens.levels_class.selected_level
         snake.level_highscore = information['level_highscores'][selected_level][str(snake.difficulty)]
-
+    
         SCREEN_UPDATE = pygame.USEREVENT
         timer_set = False
 
