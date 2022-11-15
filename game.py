@@ -40,15 +40,6 @@ class Game(object):
 
         return coord_list
 
-    def add_json_highscores(self, information: json, screens: Screens):
-        levels_amount_dif = len(screens.levels_class.levels) - len(information['level_highscores'])
-        if levels_amount_dif > 0:
-            score_dict = {"350": 0, "200":0, "100":0}
-            for _ in range(levels_amount_dif):
-                information['level_highscores'].append(score_dict)
-                with open("information.json", "w") as j_file:
-                    json.dump(information, j_file, indent=2)
-
     def run(self):
         pygame.init()
         pygame.font.init()
@@ -78,10 +69,7 @@ class Game(object):
         pumpkin_list[0].random_pos(snake.body, screens.levels_class.current_level_coord)
         selected_level = screens.levels_class.selected_level
         snake.level_highscore = information['level_highscores'][selected_level][str(snake.difficulty)]
-
-        #if the json file does not have the right amount of levels. Quickly add them to the file
-        self.add_json_highscores(information, screens)
-            
+    
         SCREEN_UPDATE = pygame.USEREVENT
         timer_set = False
 
