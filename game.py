@@ -146,14 +146,14 @@ class Game(object):
                                 with open("information.json", "w") as j_file:
                                     information['random_highscore'][str(snake.difficulty)] = snake.score
                                     snake.level_highscore = snake.score
-                                    json.dump(information, j_file, indent=2)
+                                    json.dump(information, j_file, indent=4)
                         else:
                             snake.level_highscore = information['level_highscores'][selected_level][str(snake.difficulty)]
                             if snake.score > snake.level_highscore:
                                 with open("information.json", "w") as j_file:
                                     information['level_highscores'][selected_level][str(snake.difficulty)] = snake.score
                                     snake.level_highscore = snake.score
-                                    json.dump(information, j_file, indent=2)
+                                    json.dump(information, j_file, indent=4)
                 # if the eaten pumpkin has gone through the whole snake, remove from list
                     if destroy:
                         # removes specific class instance from list
