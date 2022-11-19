@@ -2,6 +2,10 @@
 
 Game for CPSC 8700
 
+# Presentation
+
+Our presentation for class located [here](./8700SnakeGamePres.pdf) 
+
 # Install Requirements
 
 *You ***must*** have Python 3.10 to run this game*
