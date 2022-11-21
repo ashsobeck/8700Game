@@ -183,12 +183,11 @@ class Game(object):
                     snake.level_highscore = information['random_highscore'][str(snake.difficulty)]
                 else:
                     if selected_level != screens.levels_class.selected_level:
-                        #if the user has changed the level, change the random position of the first pump
+                        # if the user has changed the level, change the random position of the first pump
                         pumpkin_list[0].random_pos(snake.body, screens.levels_class.current_level_coord)
                         selected_level = screens.levels_class.selected_level
-                    #if the user changed difficulty, set highscore for that difficulty
+                    # if the user changed difficulty, set highscore for that difficulty
                     snake.level_highscore = information['level_highscores'][selected_level][str(snake.difficulty)]
-                    
 
             # update the display
             pygame.display.update()
