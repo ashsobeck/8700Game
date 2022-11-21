@@ -6,7 +6,7 @@ class Blocker():
     def __init__(self, window, snake_body: list[list[int, int]], width=960,
                  height=640, block_size=32, position=[-1, -1]):
         # make blocker opaque
-        self.image = pygame.image.load("icons/blocker.png").convert()
+        self.image = pygame.image.load("icons/block.png").convert()
         self.image.set_alpha(255)
 
         self.window = window
@@ -27,7 +27,7 @@ class Blocker():
         # make a clone
         if x != -1 and y != -1:
             return Blocker(self.window, self.snake_body, self.width,
-                           self.height, self.block_size, (x, y))
+                           self.height, self.block_size, [x, y])
         block = Blocker(self.window, self.snake_body, self.width, self.height, self.block_size)
         return block
 
@@ -37,7 +37,7 @@ class Blocker():
             print('NOPE YOU DED')
         return self.hit
 
-    def get_pos(self, position: tuple(int, int)):
+    def get_pos(self, position: list[int]):
         x, y = position
         x *= self.block_size
         y *= self.block_size

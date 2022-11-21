@@ -1,10 +1,12 @@
 import pygame
 import json
+import random
 from Screens import Screens
 from pumpkin import Pumpkin
 from snake import Snake
 from blocker import Blocker
 from blocker_structures import *
+
 
 # Init pygame
 
@@ -27,10 +29,22 @@ class Game(object):
         Game.__instance.blockers = blockers
         return Game.__instance
 
+    def generate_nums_not_in_snake(self, snake_body):
+        cells_x = self.width/self.block_size
+        cells_y = self.height/self.block_size
+        x, y = random.randint(0, cells_x - 1), random.randint(0, cells_y - 1)
+
+        while [x, y] in snake_body:
+            x, y = random.randint(0, cells_x - 1), random.randint(0, cells_y - 1)
+
+        return (x, y)
+
     def make_blockers(self, window, snake_body):
         b = Blocker(window, snake_body, self.width, self.height, self.block_size)
         # blocker_list = [b.clone() for i in range(self.blockers)]
-        blocker_list = make_col(rand, y, len, block)
+        pos_x, pos_y = self.generate_nums_not_in_snake(snake_body)
+        col_len = random.randint(1, 5)
+        blocker_list = make_col(pos_x, pos_y, col_len, b)
 
         return blocker_list
 
@@ -111,10 +125,9 @@ class Game(object):
                                 pumpkin_list[0].random_pos(snake.body, screens.levels_class.current_level_coord)
 
             window.blit(screens.background_image, (0, 0))
-            random = screens.levels_class.random_level
-
+            is_random_level = screens.levels_class.random_level
             if screens.game_start:
-                if random:
+                if is_random_level:
                     for block in blockers:
                         block.draw()
                 else:
@@ -136,14 +149,14 @@ class Game(object):
                         snake.new_body = True
                         snake.score += 1
                         p = pump.clone()
-                        if random:
+                        if is_random_level:
                             p.random_pos(snake.body, blocker_coord)
                         else:
                             p.random_pos(snake.body, screens.levels_class.current_level_coord)
                         # add the new pumpking to the list
                         pump_list_copy.append(p)
                         # update the score of he difficulty and level in the json file
-                        if random:
+                        if is_random_level:
                             snake.level_highscore = information['random_highscore'][str(snake.difficulty)]
                             if snake.score > snake.level_highscore:
                                 with open("information.json", "w") as j_file:
@@ -165,7 +178,7 @@ class Game(object):
                 pumpkin_list = pump_list_copy
 
                 # check if the snake collides with itself or border
-                if random:
+                if is_random_level:
                     if snake.if_death(blocker.rect for blocker in blockers):
                         snake_alive = False
                         snake.draw_death()
@@ -175,7 +188,7 @@ class Game(object):
                         snake.draw_death()
             else:
                 screens.draw_menu()
-                if random:
+                if is_random_level:
                     if selected_level != -1:
                         #if the user has changed the level, change the random position of the first pump
                         pumpkin_list[0].random_pos(snake.body, screens.levels_class.current_level_coord)
