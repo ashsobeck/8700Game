@@ -24,4 +24,4 @@ pip install -r requirements.txt
 
 # Run
 
-Run -  ```main.py```
+Run -  ```python main.py``` or ```python3 main.py```
