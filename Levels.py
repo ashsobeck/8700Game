@@ -1,5 +1,6 @@
 import pygame
 
+
 class Levels:
 
     def __init__(self, window, width, height, block_size, information: dict):
@@ -22,46 +23,44 @@ class Levels:
         self.button = pygame.transform.scale(self.button, (self.rect_width, self.rect_height))
         self.button.set_alpha(255)
         self.random_button_rect = self.button.get_rect(topleft=(self.width/6, self.height/4 - self.rect_height - 20))
-        
 
-        #list containing all the levels
+        # list containing all the levels
         self.levels = []
         self.init_levels()
-       
-       #get the amount of levels and set the first one
+
+        # get the amount of levels and set the first one
         self.level_count = len(self.levels)
         self.selected_level = 0
         self.random_level = False
 
-        #will contain the rectangles for all the levels in levels screen
+        # will contain the rectangles for all the levels in levels screen
         self.level_select_rects = []
         self.init_level_rect()
 
-        #this will hold the rect for the current selected levels
-        #will change for every level change
-        #create a rect for each coordinate in the current selected level
+        # this will hold the rect for the current selected levels
+        # will change for every level change
+        # create a rect for each coordinate in the current selected level
         self.current_level_rect = [pygame.Rect(l[0] * self.block_size, l[1] * self.block_size, 
                                    self.block_size, self.block_size) for l in self.levels[self.selected_level]]
         self.current_level_coord = self.levels[self.selected_level]
 
         self.mouse_clicked = False
 
-
     def draw_levels_screen(self, background):
         self.window.blit(background, (0,0))
         self.window.blit(self.back_arrow, self.back_arrow_rect)
         font = pygame.font.SysFont('Arial', 25, bold=True)
-        #text_rect = text.get_rect(center=(self.width/2, 5*self.height/6))
+        # text_rect = text.get_rect(center=(self.width/2, 5*self.height/6))
         for index, rect in enumerate(self.level_select_rects):
             
-            color = (255,255,255) if index == self.selected_level else (0,0,0)
+            color = (255, 255, 255) if index == self.selected_level else (0,0,0)
                 
             text = font.render("Level " + str(index), False, color)
             text_rect = text.get_rect(center=(rect.centerx, rect.centery))
             self.window.blit(self.button, rect)
             self.window.blit(text, text_rect)
 
-        #random button
+        # random button
         color = (255,255,255) if self.random_level else (0,0,0)
         font = pygame.font.SysFont('Arial', 25, bold=True)
         text = font.render("Random", False, color)
@@ -122,7 +121,6 @@ class Levels:
             self.level_select_rects.append(pygame.Rect(left_row + col * (self.rect_width + 20), 
                                                        left_col + row * (self.rect_height + 20), 
                                                        self.rect_width, self.rect_height))
-
 
     def init_levels(self):
     
