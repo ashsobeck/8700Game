@@ -41,11 +41,22 @@ class Game(object):
 
     def make_blockers(self, window, snake_body):
         b = Blocker(window, snake_body, self.width, self.height, self.block_size)
-        # blocker_list = [b.clone() for i in range(self.blockers)]
-        pos_x, pos_y = self.generate_nums_not_in_snake(snake_body)
+        # creates random amounts of rows, columns and diagonals
         col_len = random.randint(1, 5)
-        blocker_list = make_col(pos_x, pos_y, col_len, b)
+        row_len = random.randint(1, 5)
+        diag_len = random.randint(1, 5)
+        blocker_list = []
+        for i in range(col_len):
+            col_x, col_y = self.generate_nums_not_in_snake(snake_body)
+            blocker_list.extend(make_col(col_x, col_y, col_len, b))
+        for i in range(row_len):
+            row_x, row_y = self.generate_nums_not_in_snake(snake_body)
+            blocker_list.extend(make_row(row_x, row_y, row_len, b))
+        for i in range(diag_len):
+            diag_x, diag_y = self.generate_nums_not_in_snake(snake_body)
+            blocker_list.extend(make_diagonal(diag_x, diag_y, diag_len, b))
 
+        print(blocker_list)
         return blocker_list
 
     def get_blocker_coord(self, blocker_list: list[Blocker]):

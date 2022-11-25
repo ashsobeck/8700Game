@@ -28,3 +28,4 @@ def make_corner(x: int, y: int, length: int, block: Blocker):
 # makes a diagonal line 
 def make_diagonal(x: int, y: int, length: int, block: Blocker):
     blockers = [block.clone(x+i, y+i) for i in range(length)]
+    return blockers
