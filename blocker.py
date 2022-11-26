@@ -14,18 +14,28 @@ class Blocker():
         self.height = height
         self.block_size = block_size
         self.snake_body = snake_body
-
+        self.cells_x = self.width/self.block_size
+        self.cells_y = self.height/self.block_size
+        
         self.hit = False
         self.position = self.random_pos(self.snake_body)
+        
         if -1 not in position:
             self.position = self.get_pos(position)
 
     def draw(self):
         self.window.blit(self.image, self.rect)
+    
+    def find_x_y(self, snake_body: list[list[int, int]], x: int, y :int):
+        
+        while [x, y] in snake_body:
+            x, y = random.randint(0, self.cells_x - 1), random.randint(0, self.cells_y-1)
+        return x, y
 
     def clone(self, x=-1, y=-1):
         # make a clone
         if x != -1 and y != -1:
+            x, y = self.find_x_y(self.snake_body, x, y)
             return Blocker(self.window, self.snake_body, self.width,
                            self.height, self.block_size, [x, y])
         block = Blocker(self.window, self.snake_body, self.width, self.height, self.block_size)
@@ -47,12 +57,9 @@ class Blocker():
 
     # snake body should be coordinates of the snake
     def random_pos(self, snake_body: list[list[int, int]]):
-        cells_x = self.width/self.block_size
-        cells_y = self.height/self.block_size
-        x, y = random.randint(0, cells_x - 1), random.randint(0, cells_y - 1)
+        x, y = random.randint(0, self.cells_x - 1), random.randint(0, self.cells_y - 1)
         # generate random numbers until it's not in the snake if it appears
-        while [x, y] in snake_body:
-            x, y = random.randint(0, cells_x - 1), random.randint(0, cells_y-1)
+        x, y = self.find_x_y(snake_body, x, y)
 
         x *= self.block_size
         y *= self.block_size
