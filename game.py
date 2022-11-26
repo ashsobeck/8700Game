@@ -56,7 +56,6 @@ class Game(object):
             diag_x, diag_y = self.generate_nums_not_in_snake(snake_body)
             blocker_list.extend(make_diagonal(diag_x, diag_y, diag_len, b))
 
-        print(blocker_list)
         return blocker_list
 
     def get_blocker_coord(self, blocker_list: list[Blocker]):
