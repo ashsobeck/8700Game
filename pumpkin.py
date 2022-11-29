@@ -58,7 +58,7 @@ class Pumpkin():
         x, y = random.randint(0, cells_x - 1), random.randint(0, cells_y - 1)
         # generate random numbers until it's not in the snake if it appears
         bad_coord = snake_body + levels
-        while [x, y] in bad_coord:
+        while [x, y] in snake_body or [x, y] in levels:
             x, y = random.randint(0, cells_x - 1), random.randint(0, cells_y-1)
 
         x *= self.block_size
